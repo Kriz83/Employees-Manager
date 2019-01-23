@@ -1,0 +1,48 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Searched Employees
+{% endblock %}
+
+{% block body %}  
+
+    <table class="table">
+        <tr>
+            <th>
+                Id.
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Surname
+            </th>
+            <th>
+                BornDate
+            </th>
+            <th>
+                Document Id
+            </th>
+        </tr>
+        {% for employee in employees %}
+            <tr>
+                <td>
+                    {{ employee.id }}
+                </td>
+                <td>
+                    {{ employee.name }}
+                </td>
+                <td>
+                    {{ employee.surname }}
+                </td>
+                <td>
+                    {{ employee.bornDate|date('Y-m-d') }}
+                </td>
+                <td>
+                    {{ employee.idDocumentNumber }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
