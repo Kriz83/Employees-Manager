@@ -59,7 +59,7 @@ class EmployeeController extends AbstractController
             );
         }
 
-        return $this->render('employee/profile.html.twig', [
+        return $this->render('employee/profile/main.html.twig', [
             'employee' => $employee
         ]);
     }

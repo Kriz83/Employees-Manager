@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Profile for: <span style="color: black;">{{ employee.name }} {{ employee.surname }}</span>
+{% endblock %}
+
+{% block body %}
+    <table class="table table-bordered">
+        <tr>
+            <td width="27%">
+                {% block menu_left %}
+                    {% include '/employee/profile/left_menu.html.twig' %}
+                {% endblock %}
+            </td>
+            <td width="1%" style="border-bottom-color: white; border-top-color: white">
+            </td>
+            <td width="72%">
+                {% block main_window %}
+                    {% include '/employee/profile/main_window.html.twig' %}
+                {% endblock %}
+            </td>
+        </tr>
+    </table>
+{% endblock %}

@@ -1,0 +1,34 @@
+<table class="table">
+    <tr>
+        <td>
+            Name:
+        </td>
+        <td>
+            {{ employee.name }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Surname:
+        </td>
+        <td>
+            {{ employee.surname }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Born Date:
+        </td>
+        <td>
+            {{ employee.bornDate|date('Y-m-d') }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Employee document Id:
+        </td>
+        <td>
+            {{ employee.idDocumentNumber }}
+        </td>
+    </tr>
+</table>

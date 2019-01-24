@@ -27,19 +27,29 @@
         {% for employee in employees %}
             <tr>
                 <td>
-                    {{ employee.id }}
+                    <a href="{{ path('app_employee_profile', { 'id': employee.id }) }}">
+                        {{ employee.id }}
+                    </a>
                 </td>
                 <td>
-                    {{ employee.name }}
+                    <a href="{{ path('app_employee_profile', { 'id': employee.id }) }}">
+                        {{ employee.name }}
+                    </a>
                 </td>
                 <td>
-                    {{ employee.surname }}
+                    <a href="{{ path('app_employee_profile', { 'id': employee.id }) }}">
+                        {{ employee.surname }}
+                    </a>
                 </td>
                 <td>
-                    {{ employee.bornDate|date('Y-m-d') }}
+                    <a href="{{ path('app_employee_profile', { 'id': employee.id }) }}">
+                        {{ employee.bornDate|date('Y-m-d') }}
+                    </a>
                 </td>
                 <td>
-                    {{ employee.idDocumentNumber }}
+                    <a href="{{ path('app_employee_profile', { 'id': employee.id }) }}">
+                        {{ employee.idDocumentNumber }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}
