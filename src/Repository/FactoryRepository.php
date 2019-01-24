@@ -19,32 +19,29 @@ class FactoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Factory::class);
     }
 
-    // /**
-    //  * @return Factory[] Returns an array of Factory objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getToListArray() 
+	{			
+        $active = 1;	
+        $query = $this->createQueryBuilder('a')
+            ->select('a.id as id, a.name as name')
+            ->orderBy('a.name', 'ASC')
+            ->getQuery();
+            
+        $factories = $query->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?Factory
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+        $factoriesArray = [];
+        
+		//loop to set choices
+		foreach($factories as $lName) {
+            
+			$x =  $lName['id'];
+			$c = $lName['name'];
+			$factoriesArray["$c"] = $x;			
+
+        }
+
+        return $factoriesArray;
+
+    } 
+    
 }

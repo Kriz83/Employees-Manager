@@ -1,39 +1,67 @@
 <?php
 
-namespace App\Form\Employee;
+namespace App\Form\Contract;
 
+use App\Entity\Factory;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AddContractType extends AbstractType
 {
+    private $em;
+    
+    /**
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
-           
+        $factoriesArray = $this->em
+            ->getRepository('App:Factory')
+            ->getToListArray();
+
+        $positionsArray = $this->em
+            ->getRepository('App:Position')
+            ->getToListArray();
+
+        $contractTypesArray = $this->em
+            ->getRepository('App:ContractType')
+            ->getToListArray();
+
         $builder
-            ->add(
-                'factory', TextType::class, array(
+            ->add('factory' , ChoiceType::class, array(
+                    'choices' => array(
+                        $factoriesArray),
                     'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Factory :',
                     'required' => true,
-                
-                )
-            )
-            ->add(
-                'position', TextType::class, array(
+            ))
+            ->add('position' , ChoiceType::class, array(
+                    'choices' => array(
+                        $positionsArray),
                     'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Position :',
                     'required' => true,
-                
-                )
-            )
+            ))
+            ->add('contractType' , ChoiceType::class, array(
+                    'choices' => array(
+                        $contractTypesArray),
+                    'attr' => array(
+                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
+                    'label' => 'Contract type :',
+                    'required' => true,
+            ))
             ->add(
                 'startDate', DateType::class, array(
                     'attr' => array(

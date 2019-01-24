@@ -1,7 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% block pageTitle %}
-    Show Contract lists for Employee
+    Factories list Show Contract lists for Employee: 
+    <span style="color: black;">
+        {{ employee.name }} {{ employee.surname }}
+    </span>
+    <br>
+    <a href="{{ path('app_contract_add', { 'employeeId': employee.id }) }}">
+        <button class="btn btn-success">
+            Create New Contract
+        </button>
+    </a>
 {% endblock %}
 
 {% block body %}
@@ -10,11 +19,45 @@
             <th>
                 Id.
             </th>
+            <th>
+                Factory
+            </th>
+            <th>
+                Position
+            </th>
+            <th>
+                Contract Type
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                Stop date
+            </th>
         </tr>
+        {% for contract in contracts %}
         <tr>
             <td>
-            
+                {{ contract.id }}
+            </td>
+            <td>
+                {{ contract.factory.name }}                
+            </td>
+            <td>
+                {{ contract.position.name }}                  
+            </td>
+            <td>
+                {{ contract.contractType.name }}                
+            </td>
+            <td>
+                {{ contract.startDate|date('Y-m-d') }}                
+            </td>
+            <td>
+                {{ contract.stopDate|date('Y-m-d') }}                
             </td>
         </tr>
+            
+        {% endfor %}
     </table>
 {% endblock %}
+            

@@ -19,32 +19,29 @@ class ContractTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, ContractType::class);
     }
 
-    // /**
-    //  * @return ContractType[] Returns an array of ContractType objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getToListArray() 
+	{			
+        $active = 1;	
+        $query = $this->createQueryBuilder('a')
+            ->select('a.id as id, a.name as name')
+            ->orderBy('a.name', 'ASC')
+            ->getQuery();
+            
+        $contractTypes = $query->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?ContractType
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+        $contractTypesArray = [];
+        
+		//loop to set choices
+		foreach($contractTypes as $lName) {
+            
+			$x =  $lName['id'];
+			$c = $lName['name'];
+			$contractTypesArray["$c"] = $x;			
+
+        }
+
+        return $contractTypesArray;
+
+    } 
+
 }

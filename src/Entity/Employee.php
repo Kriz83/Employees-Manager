@@ -36,6 +36,11 @@ class Employee
      */
     private $bornDate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contract", mappedBy="employee")
+     */
+    private $contracts;
+
     public function getId(): ?int
     {
         return $this->id;

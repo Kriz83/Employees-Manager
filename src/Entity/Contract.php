@@ -41,29 +41,34 @@ class Contract
      */
     private $contractType;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Employee", inversedBy="contracts")
+     */
+    private $employee;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFactory(): ?int
+    public function getFactory()
     {
         return $this->factory;
     }
 
-    public function setFactory(int $factory): self
+    public function setFactory($factory): self
     {
         $this->factory = $factory;
 
         return $this;
     }
 
-    public function getPosition(): ?int
+    public function getPosition()
     {
         return $this->position;
     }
 
-    public function setPosition(int $position): self
+    public function setPosition($position): self
     {
         $this->position = $position;
 
@@ -94,15 +99,28 @@ class Contract
         return $this;
     }
 
-    public function getContractType(): ?int
+    public function getContractType()
     {
         return $this->contractType;
     }
 
-    public function setContractType(int $contractType): self
+    public function setContractType($contractType): self
     {
         $this->contractType = $contractType;
 
         return $this;
     }
+
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee($employee)
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
 }

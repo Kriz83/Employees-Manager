@@ -19,32 +19,29 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
-    // /**
-    //  * @return Position[] Returns an array of Position objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getToListArray() 
+	{			
+        $active = 1;	
+        $query = $this->createQueryBuilder('a')
+            ->select('a.id as id, a.name as name')
+            ->orderBy('a.name', 'ASC')
+            ->getQuery();
+            
+        $positions = $query->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?Position
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+        $positionsArray = [];
+        
+		//loop to set choices
+		foreach($positions as $lName) {
+            
+			$x =  $lName['id'];
+			$c = $lName['name'];
+			$positionsArray["$c"] = $x;			
+
+        }
+
+        return $positionsArray;
+
+    } 
+    
 }

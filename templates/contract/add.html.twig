@@ -1,7 +1,11 @@
 {% extends "base.html.twig" %}
 
 {% block pageTitle %}
-    Add new Contract for Employee
+    Add new Contract for Employee: 
+    <span style="color: black;">
+        {{ employee.name }} {{ employee.surname }}
+    </span>
+    <br>
 {% endblock %}
 
 {% block body %}
