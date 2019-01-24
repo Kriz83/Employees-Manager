@@ -21,6 +21,9 @@
             <th>
                 Description
             </th>
+            <th>
+                Edit
+            </th>
         </tr>
 
         {% for position in positions %}
@@ -33,6 +36,13 @@
                 </td>
                 <td>
                     {{ position.description }}
+                </td>
+                <td>                    
+                    <a href="{{ path('app_data_positions_edit', { 'positionId': position.id }) }}">
+                        <button class="btn btn-warning">
+                            Edit
+                        </button>
+                    </a>
                 </td>
             </tr>            
         {% endfor %}
