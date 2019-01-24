@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Contract types list: <br>
+    <a href="{{ path('app_data_contracttype_add') }}">
+        <button class="btn btn-success">
+            Create New Contract Type
+        </button>
+    </a>
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <tr>
+            <th>
+                Id.
+            </th>
+            <th>
+                Contract Type name
+            </th>
+            <th>
+                Edit
+            </th>
+        </tr>
+
+        {% for contractType in contractTypes %}
+            <tr>
+                <td>
+                    {{ contractType.id }}
+                </td>
+                <td>
+                    {{ contractType.name }}
+                </td>
+                <td>                    
+                    <a href="{{ path('app_data_contracttype_edit', { 'contractTypeId': contractType.id }) }}">
+                        <button class="btn btn-warning">
+                            Edit
+                        </button>
+                    </a>
+                </td>
+            </tr>            
+        {% endfor %}
+
+    </table>
+{% endblock %}
