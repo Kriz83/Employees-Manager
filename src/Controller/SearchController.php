@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Service\Search\SearchEmployeesService;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Form\Employee\SearchForEmployeesType;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\Search\SearchEmployeesService;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,14 +48,12 @@ class SearchController extends AbstractController
     /**
      * @Route("/search/employees/show", name="app_search_employees_show")
      */
-    public function showSearchedEmployees(Request $request)
+    public function showSearchedEmployees(Request $request, EntityManagerInterface $em)
     {
-        $entityManeger = $this->getDoctrine()->getManager();
-
         $searchedIdsData = $request->query->get('searchedIdsData');
       
         //get employees array
-        $employees = $entityManeger
+        $employees = $em
             ->getRepository('App:Employee')
             ->getEmployeesByIdsArray($searchedIdsData);
         

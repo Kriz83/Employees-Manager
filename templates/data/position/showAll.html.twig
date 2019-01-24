@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Position list 
+    <a href="{{ path('app_data_positions_add') }}">
+        <button class="btn btn-success">
+            Create New Position
+        </button>
+    </a>
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <tr>
+            <th>
+                Id.
+            </th>
+            <th>
+                Position name
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+
+        {% for position in positions %}
+            <tr>
+                <td>
+                    {{ position.id }}
+                </td>
+                <td>
+                    {{ position.name }}
+                </td>
+                <td>
+                    {{ position.description }}
+                </td>
+            </tr>            
+        {% endfor %}
+
+    </table>
+{% endblock %}
