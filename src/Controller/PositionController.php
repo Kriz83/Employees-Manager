@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AddDataController extends AbstractController
+class PositionController extends AbstractController
 {
 
     /**

@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block pageTitle %}
-    Position list: <br>
-    <a href="{{ path('app_data_positions_add') }}">
+    Factories list:<br>
+    <a href="{{ path('app_data_factories_add') }}">
         <button class="btn btn-success">
-            Create New Position
+            Create New factory
         </button>
     </a>
 {% endblock %}
@@ -16,29 +16,29 @@
                 Id.
             </th>
             <th>
-                Position name
+                Factory name
             </th>
             <th>
-                Description
+                Address
             </th>
             <th>
                 Edit
             </th>
         </tr>
 
-        {% for position in positions %}
+        {% for factory in factories %}
             <tr>
                 <td>
-                    {{ position.id }}
+                    {{ factory.id }}
                 </td>
                 <td>
-                    {{ position.name }}
+                    {{ factory.name }}
                 </td>
                 <td>
-                    {{ position.description }}
+                    {{ factory.address }}
                 </td>
                 <td>                    
-                    <a href="{{ path('app_data_positions_edit', { 'positionId': position.id }) }}">
+                    <a href="{{ path('app_data_factories_edit', { 'factoryId': factory.id }) }}">
                         <button class="btn btn-warning">
                             Edit
                         </button>
