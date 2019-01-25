@@ -1,0 +1,62 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Searched Contracts
+{% endblock %}
+
+{% block body %}  
+
+    <table class="table">
+        <tr>
+            <th>
+                Id.
+            </th>
+            <th>
+                Employee
+            </th>
+            <th>
+                Factory
+            </th>
+            <th>
+                Position
+            </th>
+            <th>
+                Contract Type
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                Stop date
+            </th>
+        </tr>
+        {% for contract in contracts %}
+            <tr>
+                <td>
+                    {{ contract.id }}
+                </td>
+                <td>
+                    <a href="{{ path('app_employee_profile', { 'id': contract.employee.id }) }}">
+                        {{ contract.employee.name }} {{ contract.employee.surname }}
+                    </a>
+                </td>
+                <td>
+                    {{ contract.factory.name }}                
+                </td>
+                <td>
+                    {{ contract.position.name }}                  
+                </td>
+                <td>
+                    {{ contract.contractType.name }}                
+                </td>
+                <td>
+                    {{ contract.startDate|date('Y-m-d') }}                
+                </td>
+                <td>
+                    {{ contract.stopDate|date('Y-m-d') }}                
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

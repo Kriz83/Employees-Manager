@@ -29,4 +29,15 @@ class ContractRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+        
+    public function getContractsByIdsArray($IdsArray) 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.id IN (:IdsArray)')
+            ->setParameter('IdsArray', $IdsArray)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }
