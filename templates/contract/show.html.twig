@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block pageTitle %}
-    Factories list Show Contract lists for Employee: 
-    <span style="color: black;">
-        {{ employee.name }} {{ employee.surname }}
-    </span>
+    Contracts list for Employee: 
+
+    {% include 'employeeLink.html.twig' %}
+
     <br>
     <a href="{{ path('app_contract_add', { 'employeeId': employee.id }) }}">
         <button class="btn btn-success">

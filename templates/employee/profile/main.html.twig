@@ -1,7 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block pageTitle %}
-    Profile for: <span style="color: black;">{{ employee.name }} {{ employee.surname }}</span>
+    Profile for: 
+    {% include 'employeeLink.html.twig' %}
 {% endblock %}
 
 {% block body %}
