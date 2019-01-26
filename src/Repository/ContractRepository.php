@@ -40,4 +40,44 @@ class ContractRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function getMaxStartDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('max(p.startDate) as maxStartDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function getMinStartDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('min(p.startDate) as minStartDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function getMaxStopDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('max(p.stopDate) as maxStopDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function getMinStopDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('min(p.stopDate) as minStopDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
 }

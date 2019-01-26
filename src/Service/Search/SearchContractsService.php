@@ -35,6 +35,19 @@ class SearchContractsService implements SearchInterface
 
         //create query depending on filled forms
         $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
+
+        //Date fields to query
+        if ($form['startDateFrom']->getData()) {
+            $queryBuilder
+                ->andWhere('a.startDate >= :startDateFrom')
+                ->setParameter('startDateFrom', $form['startDateFrom']->getData());
+        }
+
+        if ($form['startDateTo']->getData()) {
+            $queryBuilder
+                ->andWhere('a.startDate <= :startDateTo')
+                ->setParameter('startDateTo', $form['startDateTo']->getData());
+        }
     
         $queryBuilder
             ->select('a.id as id');
