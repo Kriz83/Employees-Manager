@@ -24,8 +24,14 @@ class SearchContractsService implements SearchInterface
 
         $queryBuilder = $repository->createQueryBuilder('a');
 
-        //get collumns names to avoid query problems when user create form field with not matching name
-        $entityFieldNames = $this->em->getClassMetadata(Contract::class)->getFieldNames();
+        /*
+            Get collumns names to avoid query problems when user create form field with not matching name.
+            Fields with assosiation must be loaded by diffrent method so two arrays must be merged
+        */
+        $entityFieldNames = array_merge(
+            $this->em->getClassMetadata(Contract::class)->getFieldNames(),
+            array_keys($this->em->getClassMetadata(Contract::class)->getAssociationMappings())
+        );
 
         //create query depending on filled forms
         $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);

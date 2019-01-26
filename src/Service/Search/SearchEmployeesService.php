@@ -24,8 +24,15 @@ class SearchEmployeesService implements SearchInterface
 
         $queryBuilder = $repository->createQueryBuilder('a');
 
-        //get collumns names to avoid query problems when user create form field with not matching name
-        $entityFieldNames = $this->em->getClassMetadata(Employee::class)->getFieldNames();
+        /*
+            Get collumns names to avoid query problems when user create form field with not matching name.
+            Fields with assosiation must be loaded by diffrent method so two arrays must be merged
+        */
+        $entityFieldNames = array_merge(
+            $this->em->getClassMetadata(Employee::class)->getFieldNames(),
+            array_keys($this->em->getClassMetadata(Employee::class)->getAssociationMappings())
+        );
+
         //create query depending on filled forms
         $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
     
