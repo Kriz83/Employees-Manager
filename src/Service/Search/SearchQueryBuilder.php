@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use DateTime;
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Form\FormInterface;
@@ -33,6 +34,13 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
 
                 if ($value == null) {    
                     //prevent search when value is null for query creating
+                    continue;
+                } elseif ($value instanceof DateTime) {
+                    /*
+                        Prevent date searches
+                        (QueryBuilder can not decide which instruction should be used - whether a specific date or date in the range is to be found)
+                        The date query should be used elsewhere
+                    */
                     continue;
                 } elseif (!is_numeric($value)) {
                     //text search
