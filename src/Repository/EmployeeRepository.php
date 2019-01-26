@@ -40,4 +40,24 @@ class EmployeeRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function getMaxBornDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('max(p.bornDate) as maxBornDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    public function getMinBornDate() 
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('min(p.bornDate) as minBornDate')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
 }

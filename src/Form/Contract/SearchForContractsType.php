@@ -26,34 +26,20 @@ class SearchForContractsType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
-        $factoriesArray = $this->em
-            ->getRepository('App:Factory')
-            ->getToListArray();
+        $factoriesArray = $this->em->getRepository('App:Factory')->getToListArray();
 
-        $positionsArray = $this->em
-            ->getRepository('App:Position')
-            ->getToListArray();
+        $positionsArray = $this->em->getRepository('App:Position')->getToListArray();
 
-        $contractTypesArray = $this->em
-            ->getRepository('App:ContractType')
-            ->getToListArray();
+        $contractTypesArray = $this->em->getRepository('App:ContractType')->getToListArray();
 
         //get years range for search
-        $maxStartDate = $this->em
-            ->getRepository('App:Contract')
-            ->getMaxStartDate();
+        $maxStartDate = $this->em->getRepository('App:Contract')->getMaxStartDate();
         
-        $minStartDate = $this->em
-            ->getRepository('App:Contract')
-            ->getMinStartDate();
+        $minStartDate = $this->em->getRepository('App:Contract')->getMinStartDate();
 
-        $maxStopDate = $this->em
-            ->getRepository('App:Contract')
-            ->getMaxStopDate();
+        $maxStopDate = $this->em->getRepository('App:Contract')->getMaxStopDate();
         
-        $minStopDate = $this->em
-            ->getRepository('App:Contract')
-            ->getMinStopDate();
+        $minStopDate = $this->em->getRepository('App:Contract')->getMinStopDate();
 
         if ($maxStartDate) {
             $maxStartDate = $this->convert->convertDateStringToDatetimeObject($maxStartDate['maxStartDate']);

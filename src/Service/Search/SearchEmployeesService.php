@@ -35,6 +35,19 @@ class SearchEmployeesService implements SearchInterface
 
         //create query depending on filled forms
         $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
+
+        //Date fields to query
+        if ($form['bornDateFrom']->getData()) {
+            $queryBuilder
+                ->andWhere('a.bornDate >= :bornDateFrom')
+                ->setParameter('bornDateFrom', $form['bornDateFrom']->getData());
+        }
+
+        if ($form['bornDateTo']->getData()) {
+            $queryBuilder
+                ->andWhere('a.bornDate <= :bornDateTo')
+                ->setParameter('bornDateTo', $form['bornDateTo']->getData());
+        }
     
         $queryBuilder
             ->select('a.id as id');
