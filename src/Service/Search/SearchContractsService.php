@@ -25,10 +25,10 @@ class SearchContractsService implements SearchInterface
         $queryBuilder = $repository->createQueryBuilder('a');
 
         //get collumns names to avoid query problems when user create form field with not matching name
-        $entityColumnNames = $this->em->getClassMetadata(Contract::class)->getColumnNames();
+        $entityFieldNames = $this->em->getClassMetadata(Contract::class)->getFieldNames();
 
         //create query depending on filled forms
-        $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityColumnNames);
+        $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
     
         $queryBuilder
             ->select('a.id as id');

@@ -33,6 +33,15 @@ class SearchForEmployeesType extends AbstractType
                     'required' => false,
                 )
             )
+            ->add(
+                'idDocumentNumber', TextType::class, array(
+                    'attr' => array(
+                        'class' => 'form-control', 
+                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                    'label' => 'Domument number :',
+                    'required' => false,
+                )
+            )
             ->add('Search', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn-primary'

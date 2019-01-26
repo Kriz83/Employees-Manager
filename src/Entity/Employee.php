@@ -27,7 +27,7 @@ class Employee
     private $surname;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, name="id_document_number", unique=true)
      */
     private $idDocumentNumber;
 

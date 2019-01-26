@@ -17,7 +17,7 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
         $this->logger = new NullLogger();
     }
 
-    public function rebuildQuery(FormInterface $form, $queryBuilder, $entityColumnNames)
+    public function rebuildQuery(FormInterface $form, $queryBuilder, $entityFieldNames)
     {
         $formData = $form->getData();
 
@@ -27,14 +27,15 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
                 change query statement depend on value
                 (could create problem when user want to search by number (in some rare cases like building number))
             */
-            if (in_array($key, $entityColumnNames)) {
+            if (in_array($key, $entityFieldNames)) {
+                //set default query statement
+                $statement = '=';
 
                 if ($value == null) {    
                     //prevent search when value is null for query creating
                     continue;
-                } elseif (is_numeric($value)) {
-                    $statement = '=';
-                } else {
+                } elseif (!is_numeric($value)) {
+                    //text search
                     $statement = 'LIKE';
                     $value = '%'.$value.'%';
                 }
@@ -42,17 +43,21 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
                 $queryBuilder
                     ->andWhere('a.'.$key.' '.$statement.' :'.$key.'')
                     ->setParameter(''.$key.'', $value);
+
             } else {
+
                 $this->logger->critical(
-                    sprintf('Not found: "%s", ORM column. Change form field name to match existing ORM column.', $key)
+                    sprintf('Not found: "%s", Entity column. Change form field name to match existing Entity column.', $key)
                 );
                 throw new NotFoundHttpException(
-                    sprintf('Not found: "%s", ORM column. Change form field name to match existing ORM column.', $key)
+                    sprintf('Not found: "%s", Entity column. Change form field name to match existing Entity column.', $key)
                 );
+
             }         
             
         }
 
         return $queryBuilder;
     }
+
 }
