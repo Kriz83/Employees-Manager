@@ -14,7 +14,6 @@ class SearchContractsService implements SearchInterface
     public function __construct(EntityManagerInterface $em, SearchQueryBuilderInterface $queryRebuilder)
     {
         $this->em = $em;
-        //change builder in services.yml to use builder for contracts
         $this->queryRebuilder = $queryRebuilder;
     }
 
@@ -24,8 +23,12 @@ class SearchContractsService implements SearchInterface
         $repository = $this->em->getRepository(Contract::class);
 
         $queryBuilder = $repository->createQueryBuilder('a');
+
+        //get collumns names to avoid query problems when user create form field with not matching name
+        $entityColumnNames = $this->em->getClassMetadata(Contract::class)->getColumnNames();
+
         //create query depending on filled forms
-        $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder);
+        $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityColumnNames);
     
         $queryBuilder
             ->select('a.id as id');

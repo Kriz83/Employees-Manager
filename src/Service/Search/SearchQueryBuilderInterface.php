@@ -6,5 +6,5 @@ use Symfony\Component\Form\FormInterface;
 
 interface SearchQueryBuilderInterface
 {
-    public function rebuildQuery(FormInterface $form, $query);
+    public function rebuildQuery(FormInterface $form, $queryBuilder, $entityColumnNames);
 }

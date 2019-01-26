@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\Search\SearchContractsService;
 use App\Service\Search\SearchEmployeesService;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SearchController extends AbstractController
@@ -31,7 +31,7 @@ class SearchController extends AbstractController
                 'searchedIdsData' => $searchedIdsData,
             ));
         }
-        
+
         return $this->render('search\eployees\search.html.twig', [
                 'form' => $form->createView(),
             ]

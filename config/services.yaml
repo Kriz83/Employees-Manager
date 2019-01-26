@@ -1,8 +1,6 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
+imports:
+    - { resource: services/search.yml }
 
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
 
@@ -28,8 +26,4 @@ services:
     # please note that last definitions always *replace* previous ones
         # calls:
         #     - [setMailer, ['@mailer']]
-    
-    App\Service\Search\SearchEmployeesService:
-        arguments:
-            $queryRebuilder: '@App\Service\Search\SearchEmployeesQueryBuilder'
-        autowire: true
+
