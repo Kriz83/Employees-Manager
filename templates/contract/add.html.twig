@@ -2,10 +2,7 @@
 
 {% block pageTitle %}
     Add new Contract for Employee: 
-    <span style="color: black;">
-        {{ employee.name }} {{ employee.surname }}
-    </span>
-    <br>
+    {% include 'employeeLink.html.twig' %}
 {% endblock %}
 
 {% block body %}
