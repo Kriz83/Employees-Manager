@@ -30,6 +30,10 @@ class EmployeeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($employee);
             $em->flush();
+            
+            return $this->redirectToRoute('app_employee_profile', array(
+                'employeeId' => $employee->getId(),
+            ));
         }
         
         return $this->render('employee/add.html.twig', [
@@ -38,17 +42,17 @@ class EmployeeController extends AbstractController
     }
 
     /**
-     * @Route("/employee/profile/{id}", name="app_employee_profile")
+     * @Route("/employee/profile/{employeeId}", name="app_employee_profile")
      */
     public function profile(
         LoggerInterface $logger,
         EntityManagerInterface $em,
-        $id
+        $employeeId
         )
     {
 
         $repository = $em->getRepository(Employee::class);
-        $employee = $repository->findOneById($id);
+        $employee = $repository->findOneById($employeeId);
 
         if (!$employee) {
             $logger->warning(
