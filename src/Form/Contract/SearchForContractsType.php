@@ -75,8 +75,6 @@ class SearchForContractsType extends AbstractType
                     'choices' => array(
                         $factoriesArray,
                         '|-o-|' => null,),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Factory :',
                     'required' => true,
                     'data' => null,
@@ -85,8 +83,6 @@ class SearchForContractsType extends AbstractType
                     'choices' => array(
                         $positionsArray,
                         '|-o-|' => null,),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Position :',
                     'required' => true,
                     'data' => null,
@@ -95,17 +91,12 @@ class SearchForContractsType extends AbstractType
                     'choices' => array(
                         $contractTypesArray,
                         '|-o-|' => null,),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Contract type :',
                     'required' => true,
                     'data' => null,
             ))
             ->add(
                 'startDateFrom', DateType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
                     'label' => 'Start date from:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
@@ -116,9 +107,6 @@ class SearchForContractsType extends AbstractType
             )
             ->add(
                 'startDateTo', DateType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
                     'label' => 'Start date to:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
@@ -127,7 +115,7 @@ class SearchForContractsType extends AbstractType
                     'data' => null,
                 )
             )
-            ->add('Search', SubmitType::class, array(
+            ->add('Search', SubmitType::class, array(                
                 'attr' => array(
                     'class' => 'btn-primary'
                 )

@@ -48,7 +48,7 @@ class SearchForEmployeesType extends AbstractType
                 'name', TextType::class, array(
                     'attr' => array(
                         'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                    ),
                     'label' => 'Name :',
                     'required' => false,
                 
@@ -58,7 +58,7 @@ class SearchForEmployeesType extends AbstractType
                 'surname', TextType::class, array(
                     'attr' => array(
                         'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                    ),
                     'label' => 'Surname :',
                     'required' => false,
                 )
@@ -67,7 +67,7 @@ class SearchForEmployeesType extends AbstractType
                 'idDocumentNumber', TextType::class, array(
                     'attr' => array(
                         'class' => 'form-control', 
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
+                    ),
                     'label' => 'Domument number :',
                     'required' => false,
                 )
@@ -76,7 +76,7 @@ class SearchForEmployeesType extends AbstractType
                 'bornDateFrom', DateType::class, array(
                     'attr' => array(
                         'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
+                    ),
                     'label' => 'Born date range from:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
@@ -89,7 +89,7 @@ class SearchForEmployeesType extends AbstractType
                 'bornDateTo', DateType::class, array(
                     'attr' => array(
                         'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
+                    ),
                     'label' => 'Born date range to:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',

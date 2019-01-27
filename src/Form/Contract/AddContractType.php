@@ -41,32 +41,23 @@ class AddContractType extends AbstractType
             ->add('factory' , ChoiceType::class, array(
                     'choices' => array(
                         $factoriesArray),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Factory :',
                     'required' => true,
             ))
             ->add('position' , ChoiceType::class, array(
                     'choices' => array(
                         $positionsArray),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Position :',
                     'required' => true,
             ))
             ->add('contractType' , ChoiceType::class, array(
                     'choices' => array(
                         $contractTypesArray),
-                    'attr' => array(
-                        'class' => 'form-control' , 'style' => 'color:black; font-size:14px; text-transform: uppercase; margin-bottom:15px; border: 1px solid darkgreen; width:300px; height:40px'),
                     'label' => 'Contract type :',
                     'required' => true,
             ))
             ->add(
                 'startDate', DateType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
                     'label' => 'Start date :',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
@@ -75,9 +66,6 @@ class AddContractType extends AbstractType
             )
             ->add(
                 'stopDate', DateType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:17px; margin: 0; padding-top: 0; padding-bottom: 0; border: 2px solid rgb(100, 97, 97); width:250px; height:40px'),
                     'label' => 'Stop date :',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',

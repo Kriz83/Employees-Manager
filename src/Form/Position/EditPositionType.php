@@ -15,9 +15,6 @@ class EditPositionType extends AbstractType
         $builder
             ->add(
                 'name', TextType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
                     'label' => 'Position Name :',
                     'required' => true,
                 
@@ -25,9 +22,6 @@ class EditPositionType extends AbstractType
             )
             ->add(
                 'description', TextType::class, array(
-                    'attr' => array(
-                        'class' => 'form-control',
-                        'style' => 'color:black; position: inherit; line-height: 0.3px; font-size:13px; margin-bottom:5px; border: 2px solid rgb(100, 97, 97); width:250px; height:33px'),
                     'label' => 'Description :',
                     'required' => true,
                 
