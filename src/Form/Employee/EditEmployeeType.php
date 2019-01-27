@@ -41,7 +41,7 @@ class EditEmployeeType extends AbstractType
                     'label' => 'Domument number :',
                 )
             )
-            ->add('Add employee', SubmitType::class, array(
+            ->add('Change', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn-primary'
                 )

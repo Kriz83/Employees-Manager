@@ -1,7 +1,20 @@
-Left Menu<br><br>
-
-<a href="{{ path('app_show_contracts', { 'employeeId': employee.id }) }}">
-    <button class="btn btn-info">
-        Contracts History
-    </button>
-</a>
+<table class="table-dark" width="100%">
+    <tr>
+        <td>
+            <a href="{{ path('app_show_contracts', { 'employeeId': employee.id }) }}">
+                <button class="btn btn-info">
+                    Contracts History
+                </button>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="{{ path('app_employee_edit', { 'employeeId': employee.id }) }}">
+                <button class="btn btn-info">
+                    Edit Employee data
+                </button>
+            </a>
+        </td>
+    </tr>
+</table>
