@@ -40,21 +40,27 @@ class AddContractType extends AbstractType
         $builder
             ->add('factory' , ChoiceType::class, array(
                     'choices' => array(
-                        $factoriesArray),
+                        $factoriesArray,
+                        '|-o-|' => null,),
                     'label' => 'Factory :',
                     'required' => true,
+                    'data' => null,
             ))
             ->add('position' , ChoiceType::class, array(
                     'choices' => array(
-                        $positionsArray),
+                        $positionsArray,
+                        '|-o-|' => null,),
                     'label' => 'Position :',
                     'required' => true,
+                    'data' => null,
             ))
             ->add('contractType' , ChoiceType::class, array(
                     'choices' => array(
-                        $contractTypesArray),
+                        $contractTypesArray,
+                        '|-o-|' => null,),
                     'label' => 'Contract type :',
                     'required' => true,
+                    'data' => null,
             ))
             ->add(
                 'startDate', DateType::class, array(

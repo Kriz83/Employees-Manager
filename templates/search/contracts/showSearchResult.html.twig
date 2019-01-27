@@ -36,7 +36,7 @@
                     {{ contract.id }}
                 </td>
                 <td>
-                    <a href="{{ path('app_employee_profile', { 'id': contract.employee.id }) }}">
+                    <a href="{{ path('app_employee_profile', { 'employeeId': contract.employee.id }) }}">
                         {{ contract.employee.name }} {{ contract.employee.surname }}
                     </a>
                 </td>
