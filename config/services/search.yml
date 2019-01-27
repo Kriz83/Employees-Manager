@@ -8,12 +8,10 @@ services:
     App\Service\Search\SearchEmployeesService:
         arguments:
             $queryRebuilder: '@App\Service\Search\SearchQueryBuilder'
-        autowire: true
 
     App\Service\Search\SearchContractsService:
         arguments:
             $queryRebuilder: '@App\Service\Search\SearchQueryBuilder'
-        autowire: true
 
     App\Service\Search\SearchQueryBuilder:
         calls:

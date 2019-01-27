@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Controller\EmployeeController:
+        arguments:
+            $objectExistenceValidator: '@App\Service\Validate\ValidateObjectExistenceService'
+        calls:
+            - [setLogger, ['@logger']]

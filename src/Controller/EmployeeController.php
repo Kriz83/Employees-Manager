@@ -3,23 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
-use Psr\Log\LoggerInterface;
 use App\Form\Employee\AddEmployeeType;
 use App\Form\Employee\EditEmployeeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Validate\ValidateObjectExistenceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EmployeeController extends AbstractController
 {
 
+    public function __construct(
+        ValidateObjectExistenceService $objectExistenceValidator,
+        EntityManagerInterface $em
+    ) {
+        $this->objectExistenceValidator = $objectExistenceValidator;
+        $this->em = $em;
+    }
+
     /**
      * @Route("/employee/add", name="app_employee_add")
      */
-    public function addEmployee(Request $request, EntityManagerInterface $em)
+    public function addEmployee(Request $request)
     {
 
         $employee = new Employee();
@@ -29,8 +36,8 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($employee);
-            $em->flush();
+            $this->em->persist($employee);
+            $this->em->flush();
             
             return $this->redirectToRoute('app_employee_profile', array(
                 'employeeId' => $employee->getId(),
@@ -45,24 +52,14 @@ class EmployeeController extends AbstractController
     /**
      * @Route("/employee/profile/{employeeId}", name="app_employee_profile")
      */
-    public function profile(
-        LoggerInterface $logger,
-        EntityManagerInterface $em,
-        $employeeId
-        )
+    public function profile($employeeId)
     {
 
-        $repository = $em->getRepository(Employee::class);
+        $repository = $this->em->getRepository(Employee::class);
         $employee = $repository->findOneById($employeeId);
 
-        if (!$employee) {
-            $logger->warning(
-                sprintf('Employee with id: %s, could not be found.', $id)
-            );
-            throw new NotFoundHttpException(
-                sprintf('Employee with id: %s, could not be found.', $id)
-            );
-        }
+        //check if employee exist
+        $this->objectExistenceValidator->validate($employee, $employeeId);
 
         return $this->render('employee/profile/main.html.twig', [
             'employee' => $employee
@@ -72,33 +69,22 @@ class EmployeeController extends AbstractController
     /**
      * @Route("/employee/edit/{employeeId}", name="app_employee_edit")
      */
-    public function edit(
-        Request $request,
-        LoggerInterface $logger,
-        EntityManagerInterface $em,
-        $employeeId
-        )
+    public function edit(Request $request, $employeeId)
     {
 
-        $repository = $em->getRepository(Employee::class);
+        $repository = $this->em->getRepository(Employee::class);
         $employee = $repository->findOneById($employeeId);
 
-        if (!$employee) {
-            $logger->warning(
-                sprintf('Employee with id: %s, could not be found.', $id)
-            );
-            throw new NotFoundHttpException(
-                sprintf('Employee with id: %s, could not be found.', $id)
-            );
-        }
+        //check if employee exist
+        $this->objectExistenceValidator->validate($employee, $employeeId);
         
         $form = $this->createForm(EditEmployeeType::class, $employee);
 
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($employee);
-            $em->flush();
+            $this->em->persist($employee);
+            $this->em->flush();
             
             return $this->redirectToRoute('app_employee_profile', array(
                 'employeeId' => $employee->getId(),

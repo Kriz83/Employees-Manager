@@ -1,5 +1,6 @@
 imports:
     - { resource: services/search.yml }
+    - { resource: services/employee.yml }
 
 parameters:
     locale: 'en'
