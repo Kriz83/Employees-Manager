@@ -9,19 +9,30 @@ use App\Service\Contract\AddContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Validate\ValidateObjectExistenceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContractsController extends AbstractController
 {
+    public function __construct(
+        ValidateObjectExistenceService $objectExistenceValidator,
+        EntityManagerInterface $em
+    ) {
+        $this->objectExistenceValidator = $objectExistenceValidator;
+        $this->em = $em;
+    }
 
     /**
      * @Route("/contract/add/{employeeId}", name="app_contract_add")
      */
-    public function addcontract(Request $request, EntityManagerInterface $em, AddContractService $addContractService, $employeeId)
+    public function addcontract(Request $request, AddContractService $addContractService, $employeeId)
     {
-        $employee = $em
+        $employee = $this->em
             ->getRepository('App:Employee')
             ->findOneById($employeeId);
+        
+        //check if employee exist
+        $this->objectExistenceValidator->validate($employee, $employeeId);
 
         $contract = new Contract();
 
@@ -47,13 +58,16 @@ class ContractsController extends AbstractController
     /**
      * @Route("/showContracts/{employeeId}", name="app_show_contracts")
      */
-    public function showContracts(Request $request, EntityManagerInterface $em, $employeeId)
+    public function showContracts(Request $request, $employeeId)
     {
-        $employee = $em
+        $employee = $this->em
             ->getRepository('App:Employee')
             ->findOneById($employeeId);
 
-        $contracts = $em
+        //check if employee exist
+        $this->objectExistenceValidator->validate($employee, $employeeId);
+
+        $contracts = $this->em
             ->getRepository('App:Contract')
             ->findByEmployee($employee);
 
