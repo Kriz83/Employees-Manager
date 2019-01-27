@@ -29,6 +29,18 @@ class EmployeeRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function checkIfExistByDocumentNumber($documentNumber)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->andWhere('p.idDocumentNumber = :documentNumber')
+            ->setParameter('documentNumber', $documentNumber)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
         
     public function getEmployeesByIdsArray($IdsArray) 
     {

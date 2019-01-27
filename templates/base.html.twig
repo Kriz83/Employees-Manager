@@ -22,6 +22,12 @@
                         Homepage 
                 {% endblock %}
             </div>
+            
+            <div>
+                {% block flashMessage %}
+                    {% include 'flashMessages.html.twig' %}
+                {% endblock %}
+            </div>
 
             {% block body %}
                 

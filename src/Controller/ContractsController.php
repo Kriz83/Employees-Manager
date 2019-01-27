@@ -42,7 +42,9 @@ class ContractsController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             
-           $addContractService->addContract($form, $employeeId);
+            $addContractService->addContract($form, $employeeId);
+
+            $this->addFlash('success', 'New contract was added.');
 
             return $this->redirectToRoute('app_show_contracts', array(
                 'employeeId' => $employeeId                

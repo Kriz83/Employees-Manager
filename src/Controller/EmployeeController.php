@@ -36,12 +36,25 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($employee);
-            $this->em->flush();
             
-            return $this->redirectToRoute('app_employee_profile', array(
-                'employeeId' => $employee->getId(),
-            ));
+            //check if employee with document id is not in db already
+            $documentNumber = $form['idDocumentNumber']->getData();
+
+            $repository = $this->em->getRepository(Employee::class);
+            $employeeCheck = $repository->checkIfExistByDocumentNumber($documentNumber);
+
+            if (!$employeeCheck) {
+                $this->em->persist($employee);
+                $this->em->flush();
+    
+                $this->addFlash('success', 'New employee was added.');
+                
+                return $this->redirectToRoute('app_employee_profile', array(
+                    'employeeId' => $employee->getId(),
+                ));
+            }
+
+            $this->addFlash('error', 'Employee with Document Id: '.$documentNumber.' already exist!');
         }
         
         return $this->render('employee/add.html.twig', [
@@ -86,6 +99,8 @@ class EmployeeController extends AbstractController
             $this->em->persist($employee);
             $this->em->flush();
             
+            $this->addFlash('success', 'Employee data was updated.');
+
             return $this->redirectToRoute('app_employee_profile', array(
                 'employeeId' => $employee->getId(),
             ));
