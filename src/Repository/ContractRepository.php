@@ -80,4 +80,41 @@ class ContractRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+    public function findOneActiveByEmployeeId($employeeId)
+    {
+        $active = true;
+
+        return $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->andWhere('p.employee = :employeeId')
+            ->setParameter('employeeId', $employeeId)
+            ->andWhere('p.active = :active')
+            ->setParameter('active', $active)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function getContractsInDatesRangeAndEmployeeId($startDateRange, $stopDateRange, $contractId, $employeeId)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->andWhere('p.employee = :employeeId')
+            ->setParameter('employeeId', $employeeId)
+            ->andWhere('p.id != :contractId')
+            ->setParameter('contractId', $contractId)
+            ->andWhere('
+                (p.startDate >= :startDateRange AND p.startDate <= :stopDateRange) OR
+                (p.stopDate >= :startDateRange AND p.stopDate <= :stopDateRange) OR
+                (p.startDate <= :startDateRange AND p.stopDate >= :stopDateRange)
+            ')
+            ->setParameter('startDateRange', $startDateRange)
+            ->setParameter('stopDateRange', $stopDateRange)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
+    }
 }

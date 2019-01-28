@@ -10,6 +10,7 @@ use App\Service\Contract\ContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Validate\ValidateContractService;
 use App\Service\Validate\ValidateObjectExistenceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -17,9 +18,11 @@ class ContractsController extends AbstractController
 {
     public function __construct(
         ValidateObjectExistenceService $objectExistenceValidator,
+        ValidateContractService $validateContract,
         EntityManagerInterface $em
     ) {
         $this->objectExistenceValidator = $objectExistenceValidator;
+        $this->validateContract = $validateContract;
         $this->em = $em;
     }
 
@@ -42,14 +45,27 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $validationResponse = [];
             
-            $contractService->addContract($contract, $form, $employeeId);
+            //validate contract data
+            $contractFormValidate = $this->validateContract->validate($form, $employeeId);
 
-            $this->addFlash('success', 'New contract was added.');
+            if (empty($contractFormValidate)) {
+                //update contract data
+                $contractService->addContract($contract, $form, $employeeId);
+                            
+                $this->addFlash('success', 'New contract was added.');
 
-            return $this->redirectToRoute('app_show_contracts', array(
-                'employeeId' => $employeeId                
-            ));
+                return $this->redirectToRoute('app_show_contracts', array(
+                    'employeeId' => $employeeId                
+                ));
+            } else {
+                foreach($contractFormValidate as $message) {
+                    $this->addFlash('error', $message);
+                }
+            }
+
         }
         
         return $this->render('contract/add.html.twig', [
@@ -101,15 +117,26 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            //update contract data
-            $contractService->editContract($contract, $form, $employeeId);
-            
-            $this->addFlash('success', 'Contract data was updated.');
 
-            return $this->redirectToRoute('app_show_contracts', array(
-                'employeeId' => $employeeId,
-            ));
+            $validationResponse = [];
+
+            //validate contract data
+            $contractFormValidate = $this->validateContract->validate($form, $employeeId);
+
+            if (empty($contractFormValidate)) {
+                //update contract data
+                $contractService->editContract($contract, $form, $employeeId);
+                            
+                $this->addFlash('success', 'Contract data was updated.');
+
+                return $this->redirectToRoute('app_show_contracts', array(
+                    'employeeId' => $employeeId,
+                ));
+            } else {
+                foreach($contractFormValidate as $message) {
+                    $this->addFlash('error', $message);
+                }
+            }
         }
 
         return $this->render('contract/edit.html.twig', [
