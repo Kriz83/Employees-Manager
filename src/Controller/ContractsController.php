@@ -45,8 +45,6 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $validationResponse = [];
             
             //validate contract data
             $contractFormValidate = $this->validateContract->validate($form, $employeeId);
@@ -117,8 +115,6 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $validationResponse = [];
 
             //validate contract data
             $contractFormValidate = $this->validateContract->validate($form, $employeeId);
