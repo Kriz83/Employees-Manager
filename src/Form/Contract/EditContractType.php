@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class AddContractType extends AbstractType
+class EditContractType extends AbstractType
 {
     private $em;
     
@@ -45,7 +45,6 @@ class AddContractType extends AbstractType
                         '|-o-|' => null,),
                     'label' => 'Factory :',
                     'required' => true,
-                    'data' => null,
             ))
             ->add('position' , ChoiceType::class, array(
                     'choices' => array(
@@ -53,7 +52,6 @@ class AddContractType extends AbstractType
                         '|-o-|' => null,),
                     'label' => 'Position :',
                     'required' => true,
-                    'data' => null,
             ))
             ->add('contractType' , ChoiceType::class, array(
                     'choices' => array(
@@ -61,12 +59,10 @@ class AddContractType extends AbstractType
                         '|-o-|' => null,),
                     'label' => 'Contract type :',
                     'required' => true,
-                    'data' => null,
             ))
             ->add('bidValue' , MoneyType::class, array(
                     'label' => 'Bid value :',
                     'required' => true,
-                    'data' => null,
             ))
             ->add('factory' , ChoiceType::class, array(
                     'choices' => array(
@@ -74,7 +70,6 @@ class AddContractType extends AbstractType
                         '|-o-|' => null,),
                     'label' => 'Factory :',
                     'required' => true,
-                    'data' => null,
             ))
             ->add(
                 'startDate', DateType::class, array(
@@ -82,7 +77,6 @@ class AddContractType extends AbstractType
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
                     'required' => true,
-                    'data' => null,
             ))
             ->add(
                 'stopDate', DateType::class, array(
@@ -99,9 +93,8 @@ class AddContractType extends AbstractType
                     'format' => 'dd-MM-yyyy',
                     'years' => range(date('Y'), date('Y')+1),
                     'required' => true,
-                    'data' => null,
             ))
-            ->add('Add contract', SubmitType::class, array(
+            ->add('Change contract', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn-primary'
             )));

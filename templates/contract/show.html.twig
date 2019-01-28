@@ -34,29 +34,53 @@
             <th>
                 Stop date
             </th>
+            <th>
+                Details
+            </th>
+            <th>
+                Edit
+            </th>
         </tr>
-        {% for contract in contracts %}
-        <tr>
-            <td>
-                {{ contract.id }}
-            </td>
-            <td>
-                {{ contract.factory.name }}                
-            </td>
-            <td>
-                {{ contract.position.name }}                  
-            </td>
-            <td>
-                {{ contract.contractType.name }}                
-            </td>
-            <td>
-                {{ contract.startDate|date('Y-m-d') }}                
-            </td>
-            <td>
-                {{ contract.stopDate|date('Y-m-d') }}                
-            </td>
-        </tr>
-            
+            {% for contract in contracts %}
+            {# set row color for active contracts #}
+            {% set activeRow = '' %}
+            {% if contract.active %}
+                {% set activeRow = 'class=activeRow' %}
+            {% endif %}
+            <tr {{ activeRow }}>
+                <td>
+                    {{ contract.id }}
+                </td>
+                <td>
+                    {{ contract.factory.name }}                
+                </td>
+                <td>
+                    {{ contract.position.name }}                  
+                </td>
+                <td>
+                    {{ contract.contractType.name }}                
+                </td>
+                <td>
+                    {{ contract.startDate|date('Y-m-d') }}                
+                </td>
+                <td>
+                    {{ contract.stopDate|date('Y-m-d') }}                
+                </td>
+                <td>
+                    <a href="{{ path('app_contract_details', { 'contractId': contract.id }) }}">
+                        <button class="btn btn-warning">
+                            Detail
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('app_contract_edit', { 'contractId': contract.id }) }}">
+                        <button class="btn btn-info">
+                            Edit
+                        </button>
+                    </a>
+                </td>
+            </tr>            
         {% endfor %}
     </table>
 {% endblock %}

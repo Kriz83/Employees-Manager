@@ -38,8 +38,10 @@ class AddContractService
         $contract->setPosition($position);
         $contract->setFactory($factory);
         $contract->setContractType($contractType);
+        $contract->setBidValue($form['bidValue']->getData());
         $contract->setStartDate($form['startDate']->getData());
         $contract->setStopDate($form['stopDate']->getData());
+        $contract->setSignDate($form['signDate']->getData());
 
         $this->em->persist($contract);
         $this->em->flush();

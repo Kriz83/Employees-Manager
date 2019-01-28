@@ -93,4 +93,16 @@ class Employee
 
         return $this;
     }
+
+    public function getContracts()
+    {
+        return $this->contracts;
+    }
+
+    public function setContracts($contracts): self
+    {
+        $this->contracts = $contracts;
+
+        return $this;
+    }
 }

@@ -1,0 +1,84 @@
+{% extends "base.html.twig" %}
+
+{% block pageTitle %}
+    Contract Details for Employee: 
+    {% include 'employeeLink.html.twig' %}
+{% endblock %}
+
+{% block body %}
+
+    <table class="table" width="100%">
+        <tr>
+            <th>
+                Start Date:
+            </th>
+            <td>
+                {% if contract.startDate %}
+                    {{ contract.startDate|date('Y-m-d') }}
+                {% else %}
+                    ---
+                {% endif %}                
+            </td>
+            <th>
+                Stop Date:
+            </th>
+            <td>
+                {% if contract.stopDate %}
+                    {{ contract.stopDate|date('Y-m-d') }}
+                {% else %}
+                    ---
+                {% endif %} 
+            </td>
+            <th>
+                Sign Date:
+            </th>
+            <td>
+                {% if contract.signDate %}
+                    {{ contract.signDate|date('Y-m-d') }}
+                {% else %}
+                    ---
+                {% endif %} 
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Factory:
+            </th>
+            <td>
+                {{ contract.factory.name }}     
+            </td>
+            <th>
+                Position:
+            </th>
+            <td>
+                {{ contract.position.name }}
+            </td>
+            <th>
+                Contract Type:
+            </th>
+            <td>
+                {{ contract.contractType.name }}
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Bid value:
+            </th>
+            <td>
+                {{ contract.bidValue }}     
+            </td>
+            <th>
+            </th>
+            <td>
+            
+            </td>
+            <th>
+            
+            </th>
+            <td>
+            
+            </td>
+        </tr>
+    </table>
+    
+{% endblock %}

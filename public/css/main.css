@@ -1,6 +1,7 @@
 
-.pageTitle {background-color: #48b0e4;
+.pageTitle {
     
+    background-color: #48b0e4;    
     width: 100%;
 	background-color: #0088cc; background-image: -webkit-gradient(linear, left top, left bottom, from(#48b0e4), to(#0088cc));
     background-image: -webkit-linear-gradient(top, #48b0e4, #0088cc);
@@ -15,4 +16,8 @@
     margin-top: 1%;
     margin-bottom: 1%;
     text-align: center;    
+}
+
+.activeRow {
+    background-color: #acd3b9;
 }

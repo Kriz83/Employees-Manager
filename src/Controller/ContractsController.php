@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contract;
 use App\Form\Contract\AddContractType;
+use App\Form\Contract\EditContractType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Contract\AddContractService;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +77,65 @@ class ContractsController extends AbstractController
         return $this->render('contract/show.html.twig', [
             'employee' => $employee,
             'contracts' => $contracts,
+        ]);
+    }
+
+    /**
+     * @Route("/contract/edit/{contractId}", name="app_contract_edit")
+     */
+    public function edit(Request $request, $contractId)
+    {
+
+        $repository = $this->em->getRepository(Contract::class);
+        $contract = $repository->findOneById($contractId);
+
+        //check if contract exist
+        $this->objectExistenceValidator->validate($contract, $contractId);
+        
+        //get employee data
+        $employee = $contract->getEmployee();
+        
+        $form = $this->createForm(EditContractType::class, $contract);
+
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            //update contract data
+            
+            $this->addFlash('success', 'Contract data was updated.');
+
+            return $this->redirectToRoute('app_show_contracts', array(
+                'employeeId' => $employee->getId(),
+            ));
+        }
+
+        return $this->render('contract/edit.html.twig', [
+            'contract' => $contract,
+            'employee' => $employee,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/contract/details/{contractId}", name="app_contract_details")
+     */
+    public function details(Request $request, $contractId)
+    {
+
+        $repository = $this->em->getRepository(Contract::class);
+        $contract = $repository->findOneById($contractId);
+
+        //check if contract exist
+        $this->objectExistenceValidator->validate($contract, $contractId);
+        
+        //get employee data
+        $employee = $contract->getEmployee();
+        
+
+        return $this->render('contract/details.html.twig', [
+            'contract' => $contract,
+            'employee' => $employee,
         ]);
     }
 

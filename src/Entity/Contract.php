@@ -46,6 +46,26 @@ class Contract
      */
     private $employee;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Annex", mappedBy="contract")
+     */
+    private $annex;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $signDate;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $bidValue;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,11 +136,58 @@ class Contract
         return $this->employee;
     }
 
-    public function setEmployee($employee)
+    public function setEmployee($employee): self
     {
         $this->employee = $employee;
 
         return $this;
     }
 
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public function setActive($active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    public function getAnnex()
+    {
+        return $this->annex;
+    }
+
+    public function setAnnex($annex): self
+    {
+        $this->annex = $annex;
+
+        return $this;
+    }
+
+    public function getSignDate(): ?\DateTimeInterface
+    {
+        return $this->signDate;
+    }
+
+    public function setSignDate(?\DateTimeInterface $signDate): self
+    {
+        $this->signDate = $signDate;
+
+        return $this;
+    }
+
+    public function getBidValue(): ?float
+    {
+        return $this->bidValue;
+    }
+
+    public function setBidValue(?float $bidValue): self
+    {
+        $this->bidValue = $bidValue;
+
+        return $this;
+    }
 }
