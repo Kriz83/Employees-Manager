@@ -94,6 +94,12 @@ class EditContractType extends AbstractType
                     'years' => range(date('Y'), date('Y')+1),
                     'required' => true,
             ))
+            ->add('active' , ChoiceType::class, array(
+                    'choices' => array(
+                        'Yes' => true,
+                        'No' => false,),
+                    'label' => 'Active :',
+            ))
             ->add('Change contract', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn-primary'

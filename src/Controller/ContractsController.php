@@ -6,7 +6,7 @@ use App\Entity\Contract;
 use App\Form\Contract\AddContractType;
 use App\Form\Contract\EditContractType;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\Contract\AddContractService;
+use App\Service\Contract\ContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +26,7 @@ class ContractsController extends AbstractController
     /**
      * @Route("/contract/add/{employeeId}", name="app_contract_add")
      */
-    public function addcontract(Request $request, AddContractService $addContractService, $employeeId)
+    public function addcontract(Request $request, ContractService $contractService, $employeeId)
     {
         $employee = $this->em
             ->getRepository('App:Employee')
@@ -43,7 +43,7 @@ class ContractsController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             
-            $addContractService->addContract($form, $employeeId);
+            $contractService->addContract($contract, $form, $employeeId);
 
             $this->addFlash('success', 'New contract was added.');
 
@@ -83,7 +83,7 @@ class ContractsController extends AbstractController
     /**
      * @Route("/contract/edit/{contractId}", name="app_contract_edit")
      */
-    public function edit(Request $request, $contractId)
+    public function edit(Request $request, ContractService $contractService, $contractId)
     {
 
         $repository = $this->em->getRepository(Contract::class);
@@ -94,6 +94,7 @@ class ContractsController extends AbstractController
         
         //get employee data
         $employee = $contract->getEmployee();
+        $employeeId = $employee->getId();
         
         $form = $this->createForm(EditContractType::class, $contract);
 
@@ -102,11 +103,12 @@ class ContractsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             //update contract data
+            $contractService->editContract($contract, $form, $employeeId);
             
             $this->addFlash('success', 'Contract data was updated.');
 
             return $this->redirectToRoute('app_show_contracts', array(
-                'employeeId' => $employee->getId(),
+                'employeeId' => $employeeId,
             ));
         }
 
