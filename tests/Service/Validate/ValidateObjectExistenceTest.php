@@ -2,22 +2,24 @@
 
 namespace App\Tests\Service\Validate;
 
-use PHPUnit\Framework\TestCase;
+use App\Tests\FixtureAwareTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Validate\ValidateObjectExistenceService;
 
-class ValidateObjectExistenceTest extends TestCase
+class ValidateObjectExistenceTest extends FixtureAwareTestCase
 {
+    
+    protected function setUp()
+    {
+        $this->validator = new ValidateObjectExistenceService();
+        $this->object = new \stdClass();
+    }
 
     /** @test */
     public function is_validate_function_return_null_when_object_was_passed()
     {
 
-        $validator = new ValidateObjectExistenceService();
-
-        $object = new \stdClass();
-
-        $this->assertSame(null, $validator->validate($object, 5));
+        $this->assertSame(null, $this->validator->validate($this->object, 5));
 
     }
 
@@ -28,11 +30,11 @@ class ValidateObjectExistenceTest extends TestCase
     public function is_validate_function_throw_exception_when_object_was_not_passed()
     {
 
-        $validator = new ValidateObjectExistenceService();
+        $this->validator = new ValidateObjectExistenceService();
 
-        $object = null;
+        $this->object = null;
 
-        $validator->validate($object, 5);
+        $this->validator->validate($this->object, 5);
 
     }
 }
