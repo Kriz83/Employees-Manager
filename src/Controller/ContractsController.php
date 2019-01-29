@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Contract\ContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Contract\RemoveContractService;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Validate\ValidateContractService;
 use App\Service\Validate\ValidateObjectExistenceService;
@@ -162,6 +163,34 @@ class ContractsController extends AbstractController
             'contract' => $contract,
             'employee' => $employee,
         ]);
+    }
+
+    
+    /**
+     * @Route("/contract/remove/{contractId}", name="app_contract_remove")
+     */
+    public function remove(RemoveContractService $removeContractService, $contractId)
+    {
+
+        $repository = $this->em->getRepository(Contract::class);
+        $contract = $repository->findOneById($contractId);
+
+        //check if contract exist
+        $this->objectExistenceValidator->validate($contract, $contractId);
+
+        //get employee data
+        $employee = $contract->getEmployee();
+        $employeeId = $employee->getId();
+
+        //remove contract
+        $removeContractService->removeContract($contract);
+        
+        $this->addFlash('warning', 'Contract data and related anexxes were removed.');
+
+        return $this->redirectToRoute('app_show_contracts', array(
+            'employeeId' => $employeeId,
+        ));
+        
     }
 
 }

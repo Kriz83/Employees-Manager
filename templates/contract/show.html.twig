@@ -40,6 +40,9 @@
             <th>
                 Edit
             </th>
+            <th>
+                Remove
+            </th>
         </tr>
             {% for contract in contracts %}
             {# set row color for active contracts #}
@@ -79,6 +82,17 @@
                             Edit
                         </button>
                     </a>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <center>
+                            <a href="{{ path('app_contract_remove', { 'contractId': contract.id }) }}">
+                                <button type="submit" id="delete" onclick="return confirm('Are you sure to remove employee : {{ contract.employee.name }} {{ contract.employee.surname }} contract?');" class="btn btn-danger">
+                                    Remove
+                                </button>
+                            </a>
+                        </center>
+                    </div>
                 </td>
             </tr>            
         {% endfor %}

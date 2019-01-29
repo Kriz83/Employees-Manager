@@ -3,7 +3,6 @@
 namespace App\Tests\Service\Validate;
 
 use App\Tests\FixtureAwareTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Validate\ValidateObjectExistenceService;
 
 class ValidateObjectExistenceTest extends FixtureAwareTestCase
@@ -29,8 +28,6 @@ class ValidateObjectExistenceTest extends FixtureAwareTestCase
      */
     public function is_validate_function_throw_exception_when_object_was_not_passed()
     {
-
-        $this->validator = new ValidateObjectExistenceService();
 
         $this->object = null;
 
