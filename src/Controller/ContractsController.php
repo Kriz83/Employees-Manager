@@ -119,7 +119,7 @@ class ContractsController extends AbstractController
 
             //validate contract data
             $contractFormValidate = $this->validateContract->validate($form, $employeeId);
-            
+
             if (empty($contractFormValidate)) {
                 //update contract data
                 $contractService->editContract($contract, $form, $employeeId);
