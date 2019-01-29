@@ -84,7 +84,6 @@ class EditContractType extends AbstractType
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
                     'required' => false,
-                    'data' => null,
             ))
             ->add(
                 'signDate', DateType::class, array(
