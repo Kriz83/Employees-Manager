@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Search\Service;
+namespace App\Tests\Service\Search;
 
 use PHPUnit\Framework\TestCase;
 
