@@ -76,6 +76,7 @@ class EditContractType extends AbstractType
                     'label' => 'Start date :',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
+                    'years' => range(date('Y'), date('Y') + 2),
                     'required' => true,
             ))
             ->add(
@@ -83,6 +84,7 @@ class EditContractType extends AbstractType
                     'label' => 'Stop date :',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
+                    'years' => range(date('Y'), date('Y') + 20),
                     'required' => false,
             ))
             ->add(
@@ -90,7 +92,7 @@ class EditContractType extends AbstractType
                     'label' => 'Sing date :',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
-                    'years' => range(date('Y'), date('Y')+1),
+                    'years' => range(date('Y'), date('Y') + 1),
                     'required' => true,
             ))
             ->add('active' , ChoiceType::class, array(

@@ -81,7 +81,7 @@ class ContractRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findOneActiveByEmployeeId($employeeId)
+    public function findOneActiveByEmployeeId($contractId, $employeeId)
     {
         $active = true;
 
@@ -89,6 +89,8 @@ class ContractRepository extends ServiceEntityRepository
             ->select('p.id')
             ->andWhere('p.employee = :employeeId')
             ->setParameter('employeeId', $employeeId)
+            ->andWhere('p.id != :contractId')
+            ->setParameter('contractId', $contractId)
             ->andWhere('p.active = :active')
             ->setParameter('active', $active)
             ->getQuery()

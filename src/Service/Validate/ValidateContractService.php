@@ -19,19 +19,20 @@ class ValidateContractService
     
     public function validate(Form $form, $employeeId): array
     {
+        //get contract id
+        $contractId = 0;
+        if (method_exists($form->getData(), 'getId')) {
+            $contractId = $form->getData()->getId();
+        }
+
         //allow only one active contract
         if (isset($form['active'])) {
-            $this->checkOtherActiveContracts($form['active']->getData(), $employeeId);
+            $this->checkOtherActiveContracts($form['active']->getData(), $contractId, $employeeId);
         }
         
         //avoid contracts in same time range
         if (isset($form['startDate']) && isset($form['stopDate'])) {
             
-            $contractId = 0;
-            if (isset($form['id'])) {
-                $contractId = $form['id']->getData();
-            }
-
             if ($form['startDate'] && $form['stopDate']) {
                 //start and stop date were passed
                 $this->compareWithOtherContractsDates($form['startDate']->getData(), $form['stopDate']->getData(), $contractId, $employeeId);                
@@ -41,13 +42,14 @@ class ValidateContractService
         return $this->validationResponse;
     }
 
-    private function checkOtherActiveContracts($active, $employeeId)
+    private function checkOtherActiveContracts($active, $contractId, $employeeId)
     {
         //check if user have got other active contracts
         if ($active) {
-            $isOtherActive = $this->em->getRepository(Contract::class)->findOneActiveByEmployeeId($employeeId);
-            if ($isOtherActive) {
-                $this->validationResponse[] = 'There is other active contract for Employee. Disable other one to make this one active.';  
+            $isOtherActive = $this->em->getRepository(Contract::class)->findOneActiveByEmployeeId($contractId, $employeeId);
+
+            if (!empty($isOtherActive)) {
+                $this->validationResponse[] = 'There is other active contract for Employee. Disable other one to make this one active.';
             }
         }
 
@@ -57,8 +59,9 @@ class ValidateContractService
     private function compareWithOtherContractsDates($startDate, $stopDate, $contractId, $employeeId)
     {
         $isOtherInDates = $this->em->getRepository(Contract::class)->getContractsInDatesRangeAndEmployeeId($startDate, $stopDate, $contractId, $employeeId);
-        if ($isOtherInDates) {
-            $this->validationResponse[] = 'There is other contract in selected dates range.';  
+        
+        if (!empty($isOtherInDates)) {
+            $this->validationResponse[] = 'There is other contract in selected dates range.';
         }
 
         return null;
