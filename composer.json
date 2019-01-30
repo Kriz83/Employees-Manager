@@ -30,6 +30,7 @@
         "twbs/bootstrap": "4.0.0-alpha.6"
     },
     "require-dev": {
+        "mockery/mockery": "^1.2",
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "4.2.*",
         "symfony/profiler-pack": "*",

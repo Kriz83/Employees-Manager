@@ -87,7 +87,7 @@
                     <div class="form-group">
                         <center>
                             <a href="{{ path('app_contract_remove', { 'contractId': contract.id }) }}">
-                                <button type="submit" id="delete" onclick="return confirm('Are you sure to remove employee : {{ contract.employee.name }} {{ contract.employee.surname }} contract?');" class="btn btn-danger">
+                                <button type="submit" id="delete" onclick="return confirm('Are you sure to remove employee : {{ contract.employee.name }} {{ contract.employee.surname }} contract? Contract can contain related annexes!');" class="btn btn-danger">
                                     Remove
                                 </button>
                             </a>

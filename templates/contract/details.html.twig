@@ -3,10 +3,17 @@
 {% block pageTitle %}
     Contract Details for Employee: 
     {% include 'employeeLink.html.twig' %}
+    <div>
+        <a href="{{ path('app_annex_add', { 'contractId': contract.id }) }}">
+            <button class="btn btn-success">
+                Create Annex
+            </button>
+        </a>
+    </div>
 {% endblock %}
 
 {% block body %}
-
+ 
     <table class="table" width="100%">
         <tr>
             <th>
@@ -69,8 +76,7 @@
             </td>
             <th>
             </th>
-            <td>
-            
+            <td>            
             </td>
             <th>
             
@@ -80,5 +86,8 @@
             </td>
         </tr>
     </table>
+
+    {% include '/annex/annexesList.html.twig' %}
+    
     
 {% endblock %}

@@ -30,7 +30,7 @@ class ContractsController extends AbstractController
     /**
      * @Route("/contract/add/{employeeId}", name="app_contract_add")
      */
-    public function addcontract(Request $request, ContractService $contractService, $employeeId)
+    public function addContract(Request $request, ContractService $contractService, $employeeId)
     {
         $employee = $this->em
             ->getRepository('App:Employee')

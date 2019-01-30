@@ -1,0 +1,46 @@
+    <div class="pageTitle">
+        List of annexes:
+    </div>
+
+    
+    <table class="table">
+        <tr>
+            <th>
+                Id.
+            </th>
+            <th>
+                Start date
+            </th>
+            <th>
+                Sign date
+            </th>
+            <th>
+                Bid Value
+            </th>
+            <th>
+                Edit
+            </th>
+            <th>
+                Remove
+            </th>
+        </tr>
+        {% for annexData in contract.annex %}
+            <tr>
+                <td>
+                    {{ annexData.id }}
+                </td>
+                <td>
+                    {{ annexData.startDate|date('Y-m-d') }}                
+                </td>
+                <td>
+                    {{ annexData.signDate|date('Y-m-d') }}                
+                </td>
+                <td>
+                    {{ annexData.bidValue }}
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr> 
+    {% endfor %}

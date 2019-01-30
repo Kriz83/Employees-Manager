@@ -21,6 +21,14 @@ class RemoveContractService
     public function removeContract($contract)
     {
         try {
+            //remove related annexes first
+            if ($contract->getAnnex()) {
+                foreach ($contract->getAnnex() as $annex) {
+                    $this->em->remove($annex);
+                }
+            }
+            $this->em->flush();
+
             $this->em->remove($contract);
             $this->em->flush();
         } catch(ORMInvalidArgumentException $e) {

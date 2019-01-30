@@ -44,7 +44,7 @@ class ContractService
         $this->em->persist($contract);
         $this->em->flush();
 
-        return $contract;
+        return null;
     }
 
     public function editContract($contract, FormInterface $form, $employeeId)
@@ -78,6 +78,6 @@ class ContractService
         $this->em->persist($contract);
         $this->em->flush();
 
-        return $contract;
+        return null;
     }
 }
