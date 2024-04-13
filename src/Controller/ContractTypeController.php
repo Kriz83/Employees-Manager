@@ -15,11 +15,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContractTypeController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/data/contracttype/showAll', name: 'app_data_contracttype_show_all')]
-    public function showAllContractTypes(EntityManagerInterface $entityManager): Response
+    public function showAllContractTypes(): Response
     {
-        //get contractTypes array
-        $contractTypes = $entityManager
+        $contractTypes = $this->entityManager
             ->getRepository(ContractType::class)
             ->findAll();
 
@@ -29,7 +33,7 @@ class ContractTypeController extends AbstractController
     }
 
     #[Route('/data/contracttype/add', name: 'app_data_contracttype_add')]
-    public function addContractType(Request $request, EntityManagerInterface $entityManager): Response
+    public function addContractType(Request $request): Response
     {
         $contractType = new ContractType();
 
@@ -38,8 +42,8 @@ class ContractTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($contractType);
-            $entityManager->flush();
+            $this->entityManager->persist($contractType);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_contracttype_show_all');
         }
@@ -50,10 +54,9 @@ class ContractTypeController extends AbstractController
     }
 
     #[Route('/data/contracttype/edit/{contractTypeId}', name: 'app_data_contracttype_edit')]
-    public function editContractType(Request $request, EntityManagerInterface $entityManager, int $contractTypeId): Response
+    public function editContractType(Request $request, int $contractTypeId): Response
     {
-        //get contractTypes array
-        $contractType = $entityManager
+        $contractType = $this->entityManager
             ->getRepository(ContractType::class)
             ->findOneById($contractTypeId);
 
@@ -62,8 +65,8 @@ class ContractTypeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($contractType);
-            $entityManager->flush();
+            $this->entityManager->persist($contractType);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_contracttype_show_all');
         }

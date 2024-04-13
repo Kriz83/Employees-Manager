@@ -6,8 +6,11 @@ namespace App\Controller;
 
 use App\Form\Contract\SearchForContractsType;
 use App\Form\Employee\SearchForEmployeesType;
+use App\Repository\ContractRepository;
+use App\Repository\EmployeeRepository;
 use App\Service\Search\SearchContractsService;
 use App\Service\Search\SearchEmployeesService;
+use App\Service\Search\SearchInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +19,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SearchController extends AbstractController
 {
+    public function __construct(
+        private EmployeeRepository $employeeRepository,
+        private ContractRepository $contractRepository,
+        private SearchInterface $searchContractsService,
+        private SearchInterface $searchEmployeesService,
+    ) {
+    }
+
     #[Route('/search/employees', name: 'app_search_employees')]
-    public function searchEmployees(Request $request, SearchEmployeesService $searchEmployees): Response
+    public function searchEmployees(Request $request): Response
     {
         $form = $this->createForm(SearchForEmployeesType::class);
 
@@ -25,7 +36,7 @@ class SearchController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //create search class (service)
-            $searchedIdsData = $searchEmployees->search($form);
+            $searchedIdsData = $this->searchEmployeesService->search($form);
 
             return $this->redirectToRoute('app_search_employees_show', [
                 'searchedIdsData' => $searchedIdsData,
@@ -38,13 +49,12 @@ class SearchController extends AbstractController
     }
 
     #[Route('/search/employees/show', name: 'app_search_employees_show')]
-    public function showSearchedEmployees(Request $request, EntityManagerInterface $entityManager): Response
+    public function showSearchedEmployees(Request $request): Response
     {
         $searchedIdsData = $request->query->get('searchedIdsData');
 
         //get employees array
-        $employees = $entityManager
-            ->getRepository('App:Employee')
+        $employees = $this->employeeRepository
             ->getEmployeesByIdsArray($searchedIdsData);
 
         return $this->render('search/employees/showSearchResult.html.twig', [
@@ -53,7 +63,7 @@ class SearchController extends AbstractController
     }
 
     #[Route('/search/contracts', name: 'app_search_contracts')]
-    public function searchContracts(Request $request, SearchContractsService $searchContracts): Response
+    public function searchContracts(Request $request): Response
     {
         $form = $this->createForm(SearchForContractsType::class);
 
@@ -61,7 +71,7 @@ class SearchController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //create search class (service)
-            $searchedIdsData = $searchContracts->search($form);
+            $searchedIdsData = $this->searchContractsService->search($form);
 
             return $this->redirectToRoute('app_search_contracts_show', [
                 'searchedIdsData' => $searchedIdsData,
@@ -74,13 +84,12 @@ class SearchController extends AbstractController
     }
 
     #[Route('/search/contracts/show', name: 'app_search_contracts_show')]
-    public function showSearchedContracts(Request $request, EntityManagerInterface $entityManager): Response
+    public function showSearchedContracts(Request $request): Response
     {
         $searchedIdsData = $request->query->get('searchedIdsData');
 
         //get contracts array
-        $contracts = $entityManager
-            ->getRepository('App:Contract')
+        $contracts = $this->contractRepository
             ->getContractsByIdsArray($searchedIdsData);
 
         return $this->render('search/contracts/showSearchResult.html.twig', [

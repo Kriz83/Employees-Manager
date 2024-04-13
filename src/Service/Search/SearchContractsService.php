@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Search;
 
 use App\Entity\Contract;
@@ -11,10 +13,12 @@ use App\Service\Search\SearchQueryBuilderInterface;
 class SearchContractsService implements SearchInterface
 {
 
-    public function __construct(EntityManagerInterface $em, SearchQueryBuilderInterface $queryRebuilder)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        SearchQueryBuilderInterface $queryBuilder
+    ) {
         $this->em = $em;
-        $this->queryRebuilder = $queryRebuilder;
+        $this->queryBuilder = $queryBuilder;
     }
 
     public function search(FormInterface $form): array
@@ -34,7 +38,7 @@ class SearchContractsService implements SearchInterface
         );
 
         //create query depending on filled forms
-        $queryBuilder = $this->queryRebuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
+        $queryBuilder = $this->queryBuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
 
         //Date fields to query
         if ($form['startDateFrom']->getData()) {

@@ -137,7 +137,7 @@ class ContractsController extends AbstractController
     }
 
     #[Route('/contract/details/{contractId}', name: 'app_contract_details')]
-    public function details(Request $request, int $contractId): Response
+    public function details(int $contractId): Response
     {
 
         $repository = $this->entityManager->getRepository(Contract::class);

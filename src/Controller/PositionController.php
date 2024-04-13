@@ -15,11 +15,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PositionController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/data/position/showAll', name: 'app_data_positions_show_all')]
-    public function showAllPositions(EntityManagerInterface $entityManager): Response
+    public function showAllPositions(): Response
     {
         //get positions array
-        $positions = $entityManager
+        $positions = $this->entityManager
             ->getRepository(Position::class)
             ->findAll();
 
@@ -29,7 +34,7 @@ class PositionController extends AbstractController
     }
 
     #[Route('/data/position/add', name: 'app_data_positions_add')]
-    public function addPosition(Request $request, EntityManagerInterface $entityManager): Response
+    public function addPosition(Request $request): Response
     {
         $position = new Position();
 
@@ -38,8 +43,8 @@ class PositionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($position);
-            $entityManager->flush();
+            $this->entityManager->persist($position);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_positions_show_all');
         }
@@ -50,10 +55,10 @@ class PositionController extends AbstractController
     }
 
     #[Route('/data/position/edit/{positionId}', name: 'app_data_positions_edit')]
-    public function editPosition(Request $request, EntityManagerInterface $entityManager, int $positionId): Response
+    public function editPosition(Request $request, int $positionId): Response
     {
         //get positions array
-        $position = $entityManager
+        $position = $this->entityManager
             ->getRepository(Position::class)
             ->findOneById($positionId);
 
@@ -62,8 +67,8 @@ class PositionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($position);
-            $entityManager->flush();
+            $this->entityManager->persist($position);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_positions_show_all');
         }

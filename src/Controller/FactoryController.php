@@ -15,11 +15,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FactoryController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/data/factory/showAll', name: 'app_data_factories_show_all')]
-    public function showAllFactories(EntityManagerInterface $entityManager): Response
+    public function showAllFactories(): Response
     {
         //get factories array
-        $factories = $entityManager
+        $factories = $this->entityManager
             ->getRepository(Factory::class)
             ->findAll();
 
@@ -29,7 +34,7 @@ class FactoryController extends AbstractController
     }
 
     #[Route('/data/factory/add', name: 'app_data_factories_add')]
-    public function addFactory(Request $request, EntityManagerInterface $entityManager): Response
+    public function addFactory(Request $request): Response
     {
         $factory = new Factory();
 
@@ -38,8 +43,8 @@ class FactoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($factory);
-            $entityManager->flush();
+            $this->entityManager->persist($factory);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_factories_show_all');
         }
@@ -50,10 +55,10 @@ class FactoryController extends AbstractController
     }
 
     #[Route('/data/factory/edit/{factoryId}', name: 'app_data_factories_edit')]
-    public function editFactory(Request $request, EntityManagerInterface $entityManager, int $factoryId): Response
+    public function editFactory(Request $request, int $factoryId): Response
     {
         //get factories array
-        $factory = $entityManager
+        $factory = $this->entityManager
             ->getRepository(Factory::class)
             ->findOneById($factoryId);
 
@@ -62,8 +67,8 @@ class FactoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($factory);
-            $entityManager->flush();
+            $this->entityManager->persist($factory);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_data_factories_show_all');
         }
