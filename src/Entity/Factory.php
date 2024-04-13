@@ -1,36 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\FactoryRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\FactoryRepository")
- */
+#[ORM\Entity(repositoryClass: FactoryRepository::class)]
 class Factory
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $address;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $address = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contract", mappedBy="factory")
-     */
-    private $contracts;
-    
+    #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'factory')]
+    private Collection $contracts;
 
     public function getId(): ?int
     {
@@ -42,10 +35,9 @@ class Factory
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -54,10 +46,23 @@ class Factory
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
+        return $this;
+    }
 
+    /**
+     * @return Collection|Contract[]
+     */
+    public function getContracts(): Collection
+    {
+        return $this->contracts;
+    }
+
+    public function setContracts(Collection $contracts): self
+    {
+        $this->contracts = $contracts;
         return $this;
     }
 }

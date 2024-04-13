@@ -1,40 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\AnnexRepository")
- */
+#[ORM\Entity(repositoryClass: AnnexRepository::class)]
 class Annex
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $signDate;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $signDate = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $startDate;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $startDate = null;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $bidValue;
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $bidValue = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Contract", inversedBy="annex")
-     */
-    private $contract;
+    #[ORM\ManyToOne(targetEntity: Contract::class, inversedBy: 'annex')]
+    private ?Contract $contract = null;
 
     public function getId(): ?int
     {
@@ -46,10 +37,9 @@ class Annex
         return $this->signDate;
     }
 
-    public function setSignDate(\DateTimeInterface $signDate): self
+    public function setSignDate(?\DateTimeInterface $signDate): self
     {
         $this->signDate = $signDate;
-
         return $this;
     }
 
@@ -58,10 +48,9 @@ class Annex
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(?\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
-
         return $this;
     }
 
@@ -73,19 +62,17 @@ class Annex
     public function setBidValue(?float $bidValue): self
     {
         $this->bidValue = $bidValue;
-
         return $this;
     }
 
-    public function getContract()
+    public function getContract(): ?Contract
     {
         return $this->contract;
     }
 
-    public function setContract($contract): self
+    public function setContract(?Contract $contract): self
     {
         $this->contract = $contract;
-
         return $this;
     }
 }

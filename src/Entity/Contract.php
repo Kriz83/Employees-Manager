@@ -1,97 +1,81 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\ContractRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ContractRepository")
- */
+#[ORM\Entity(repositoryClass: ContractRepository::class)]
 class Contract
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Factory", inversedBy="contracts")
-     */
+    #[ORM\ManyToOne(targetEntity: Factory::class, inversedBy: 'contracts')]
     private $factory;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Position", inversedBy="contracts")
-     */
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'contracts')]
     private $position;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $startDate;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $startDate = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $stopDate;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $stopDate = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ContractType", inversedBy="contracts")
-     */
+    #[ORM\ManyToOne(targetEntity: ContractType::class, inversedBy: 'contracts')]
     private $contractType;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Employee", inversedBy="contracts")
-     */
+    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'contracts')]
     private $employee;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $active = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Annex", mappedBy="contract")
-     */
+    #[ORM\OneToMany(targetEntity: Annex::class, mappedBy: 'contract')]
     private $annex;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $signDate;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $signDate = null;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $bidValue;
+    #[ORM\Column(type: 'float')]
+    private ?float $bidValue = null;
+
+    public function __construct()
+    {
+        $this->annex = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFactory()
+    public function getFactory(): ?Factory
     {
         return $this->factory;
     }
 
-    public function setFactory($factory): self
+    public function setFactory(?Factory $factory): self
     {
         $this->factory = $factory;
-
         return $this;
     }
 
-    public function getPosition()
+    public function getPosition(): ?Position
     {
         return $this->position;
     }
 
-    public function setPosition($position): self
+    public function setPosition(?Position $position): self
     {
         $this->position = $position;
-
         return $this;
     }
 
@@ -100,10 +84,9 @@ class Contract
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(?\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
-
         return $this;
     }
 
@@ -115,55 +98,67 @@ class Contract
     public function setStopDate(?\DateTimeInterface $stopDate): self
     {
         $this->stopDate = $stopDate;
-
         return $this;
     }
 
-    public function getContractType()
+    public function getContractType(): ?ContractType
     {
         return $this->contractType;
     }
 
-    public function setContractType($contractType): self
+    public function setContractType(?ContractType $contractType): self
     {
         $this->contractType = $contractType;
-
         return $this;
     }
 
-    public function getEmployee()
+    public function getEmployee(): ?Employee
     {
         return $this->employee;
     }
 
-    public function setEmployee($employee): self
+    public function setEmployee(?Employee $employee): self
     {
         $this->employee = $employee;
-
         return $this;
     }
 
-    public function getActive()
+    public function isActive(): ?bool
     {
         return $this->active;
     }
 
-    public function setActive($active): self
+    public function setActive(bool $active): self
     {
         $this->active = $active;
-
         return $this;
     }
 
-    public function getAnnex()
+    /**
+     * @return Collection|Annex[]
+     */
+    public function getAnnex(): Collection
     {
         return $this->annex;
     }
 
-    public function setAnnex($annex): self
+    public function addAnnex(Annex $annex): self
     {
-        $this->annex = $annex;
+        if (!$this->annex->contains($annex)) {
+            $this->annex[] = $annex;
+            $annex->setContract($this);
+        }
+        return $this;
+    }
 
+    public function removeAnnex(Annex $annex): self
+    {
+        if ($this->annex->removeElement($annex)) {
+            // set the owning side to null (unless already changed)
+            if ($annex->getContract() === $this) {
+                $annex->setContract(null);
+            }
+        }
         return $this;
     }
 
@@ -175,7 +170,6 @@ class Contract
     public function setSignDate(?\DateTimeInterface $signDate): self
     {
         $this->signDate = $signDate;
-
         return $this;
     }
 
@@ -187,7 +181,6 @@ class Contract
     public function setBidValue(?float $bidValue): self
     {
         $this->bidValue = $bidValue;
-
         return $this;
     }
 }

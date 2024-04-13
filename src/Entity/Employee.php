@@ -1,45 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\EmployeeRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\EmployeeRepository")
- */
+#[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $surname;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $surname = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, name="id_document_number", unique=true)
-     */
-    private $idDocumentNumber;
+    #[ORM\Column(type: 'string', length: 255, name: 'id_document_number', unique: true)]
+    private ?string $idDocumentNumber = null;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $bornDate;
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $bornDate = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contract", mappedBy="employee")
-     */
-    private $contracts;
+    #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'employee')]
+    private Collection $contracts;
 
     public function getId(): ?int
     {
@@ -51,10 +41,9 @@ class Employee
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -63,10 +52,9 @@ class Employee
         return $this->surname;
     }
 
-    public function setSurname(string $surname): self
+    public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
-
         return $this;
     }
 
@@ -78,7 +66,6 @@ class Employee
     public function setIdDocumentNumber(?string $idDocumentNumber): self
     {
         $this->idDocumentNumber = $idDocumentNumber;
-
         return $this;
     }
 
@@ -87,22 +74,23 @@ class Employee
         return $this->bornDate;
     }
 
-    public function setBornDate(\DateTimeInterface $bornDate): self
+    public function setBornDate(?\DateTimeInterface $bornDate): self
     {
         $this->bornDate = $bornDate;
-
         return $this;
     }
 
-    public function getContracts()
+    /**
+     * @return Collection|Contract[]
+     */
+    public function getContracts(): Collection
     {
         return $this->contracts;
     }
 
-    public function setContracts($contracts): self
+    public function setContracts(Collection $contracts): self
     {
         $this->contracts = $contracts;
-
         return $this;
     }
 }

@@ -1,35 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\PositionRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\PositionRepository")
- */
+#[ORM\Entity(repositoryClass: PositionRepository::class)]
 class Position
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Contract", mappedBy="position")
-     */
-    private $contracts;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'position')]
+    private Collection $contracts;
 
     public function getId(): ?int
     {
@@ -41,10 +35,9 @@ class Position
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -56,7 +49,20 @@ class Position
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+        return $this;
+    }
 
+    /**
+     * @return Collection|Contract[]
+     */
+    public function getContracts(): Collection
+    {
+        return $this->contracts;
+    }
+
+    public function setContracts(Collection $contracts): self
+    {
+        $this->contracts = $contracts;
         return $this;
     }
 }

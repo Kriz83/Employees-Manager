@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Position;
@@ -8,44 +10,38 @@ use App\Form\Position\EditPositionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PositionController extends AbstractController
 {
-
-    /**
-     * @Route("/data/position/showAll", name="app_data_positions_show_all")
-     */
-    public function showAllPositions(EntityManagerInterface $em)
+    #[Route('/data/position/showAll', name: 'app_data_positions_show_all')]
+    public function showAllPositions(EntityManagerInterface $entityManager): Response
     {
         //get positions array
-        $positions = $em
-            ->getRepository('App:Position')
+        $positions = $entityManager
+            ->getRepository(Position::class)
             ->findAll();
-       
-        return $this->render('data/position/showAll.html.twig', array(
+
+        return $this->render('data/position/showAll.html.twig', [
             'positions' => $positions
-        ));
+        ]);
     }
 
-    /**
-     * @Route("/data/position/add", name="app_data_positions_add")
-     */
-    public function addPosition(Request $request, EntityManagerInterface $em)
-    {       
+    #[Route('/data/position/add', name: 'app_data_positions_add')]
+    public function addPosition(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $position = new Position();
 
         $form = $this->createForm(AddPositionType::class, $position);
 
         $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($position);
-            $em->flush();
 
-            return $this->redirectToRoute('app_data_positions_show_all', array(
-            ));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($position);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_data_positions_show_all');
         }
 
         return $this->render('data/position/add.html.twig', [
@@ -53,26 +49,23 @@ class PositionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/data/position/edit/{positionId}", name="app_data_positions_edit")
-     */
-    public function editPosition(Request $request, EntityManagerInterface $em, $positionId)
-    {       
+    #[Route('/data/position/edit/{positionId}', name: 'app_data_positions_edit')]
+    public function editPosition(Request $request, EntityManagerInterface $entityManager, int $positionId): Response
+    {
         //get positions array
-        $position = $em
-            ->getRepository('App:Position')
+        $position = $entityManager
+            ->getRepository(Position::class)
             ->findOneById($positionId);
 
         $form = $this->createForm(EditPositionType::class, $position);
 
         $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($position);
-            $em->flush();
 
-            return $this->redirectToRoute('app_data_positions_show_all', array(
-            ));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($position);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_data_positions_show_all');
         }
 
         return $this->render('data/position/edit.html.twig', [
