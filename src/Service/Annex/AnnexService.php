@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Annex;
 
+use App\Entity\Annex;
 use App\Entity\Contract;
-use App\Entity\Employee;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -14,9 +16,11 @@ class AnnexService
         $this->em = $em;
     }
 
-    public function addAnnex(Contract $contract, $annex, FormInterface $form)
-    {        
-
+    public function addAnnex(
+        Contract $contract,
+        Annex $annex,
+        FormInterface $form
+    ): void {
         $annex->setContract($contract);
         $annex->setBidValue($form['bidValue']->getData());
         $annex->setStartDate($form['startDate']->getData());
@@ -24,8 +28,6 @@ class AnnexService
 
         $this->em->persist($annex);
         $this->em->flush();
-
-        return null;
     }
 
 }

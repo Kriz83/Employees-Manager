@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Contract;
 
 use Psr\Log\NullLogger;
@@ -18,10 +20,9 @@ class RemoveContractService
         $this->logger = new NullLogger();
     }
 
-    public function removeContract($contract)
+    public function removeContract($contract): void
     {
         try {
-            //remove related annexes first
             if ($contract->getAnnex()) {
                 foreach ($contract->getAnnex() as $annex) {
                     $this->em->remove($annex);

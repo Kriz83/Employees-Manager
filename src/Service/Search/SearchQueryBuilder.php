@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Search;
 
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Form\FormInterface;
-use App\Service\Search\SearchQueryBuilderInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\ORM\QueryBuilder;
 
 class SearchQueryBuilder implements SearchQueryBuilderInterface
 {
@@ -17,13 +19,16 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
         $this->logger = new NullLogger();
     }
 
-    public function rebuildQuery(FormInterface $form, $queryBuilder, $entityFieldNames)
-    {
+    public function rebuildQuery(
+        FormInterface $form,
+        QueryBuilder $queryBuilder,
+        $entityFieldNames
+    ): QueryBuilder {
         $formData = $form->getData();
-       
+
         //add queries to main query depend on filled form fields
         foreach ($formData as $key => $value) {
-            
+
             /*
                 1. Prevent date searches
                 (QueryBuilder can not decide which instruction should be used - whether a specific date or date in the range is to be found)
@@ -41,28 +46,24 @@ class SearchQueryBuilder implements SearchQueryBuilderInterface
             if (in_array($key, $entityFieldNames)) {
                 //set default query statement
                 $statement = '=';
-          
+
                 if (!is_numeric($value)) {
                     //text search
                     $statement = 'LIKE';
-                    $value = '%'.$value.'%';
+                    $value = '%' . $value . '%';
                 }
-    
+
                 $queryBuilder
-                    ->andWhere('a.'.$key.' '.$statement.' :'.$key.'')
-                    ->setParameter(''.$key.'', $value);
-
+                    ->andWhere('a.' . $key . ' ' . $statement . ' :' . $key . '')
+                    ->setParameter('' . $key . '', $value);
             } else {
-
                 $this->logger->critical(
                     sprintf('Not found: "%s", Entity column. Change form field name to match existing Entity column.', $key)
                 );
                 throw new NotFoundHttpException(
                     sprintf('Not found: "%s", Entity column. Change form field name to match existing Entity column.', $key)
                 );
-
-            }         
-            
+            }
         }
 
         return $queryBuilder;

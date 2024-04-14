@@ -23,7 +23,6 @@ class SearchContractsService implements SearchInterface
 
     public function search(FormInterface $form): array
     {
-        //create query builder
         $repository = $this->em->getRepository(Contract::class);
 
         $queryBuilder = $repository->createQueryBuilder('a');
@@ -37,10 +36,8 @@ class SearchContractsService implements SearchInterface
             array_keys($this->em->getClassMetadata(Contract::class)->getAssociationMappings())
         );
 
-        //create query depending on filled forms
         $queryBuilder = $this->queryBuilder->rebuildQuery($form, $queryBuilder, $entityFieldNames);
 
-        //Date fields to query
         if ($form['startDateFrom']->getData()) {
             $queryBuilder
                 ->andWhere('a.startDate >= :startDateFrom')
@@ -56,9 +53,6 @@ class SearchContractsService implements SearchInterface
         $queryBuilder
             ->select('a.id as id');
 
-        $searchedIds = $queryBuilder->getQuery()->getResult();                               
-
-        //ids array is used to find searched data
-        return $searchedIds;    
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Contract;
 
 use App\Entity\Contract;
-use App\Entity\Employee;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -14,8 +15,11 @@ class ContractService
         $this->em = $em;
     }
 
-    public function addContract($contract, FormInterface $form, $employeeId)
-    {        
+    public function addContract(
+        Contract $contract,
+        FormInterface $form,
+        int $employeeId
+    ): void {
         $employee = $this->em
             ->getRepository('App:Employee')
             ->findOneById($employeeId);
@@ -43,12 +47,13 @@ class ContractService
 
         $this->em->persist($contract);
         $this->em->flush();
-
-        return null;
     }
 
-    public function editContract($contract, FormInterface $form, $employeeId)
-    {        
+    public function editContract(
+        Contract $contract,
+        FormInterface $form,
+        int $employeeId
+    ): void {
         $employee = $this->em
             ->getRepository('App:Employee')
             ->findOneById($employeeId);
@@ -77,7 +82,5 @@ class ContractService
 
         $this->em->persist($contract);
         $this->em->flush();
-
-        return null;
     }
 }
