@@ -19,29 +19,23 @@ class ContractTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, ContractType::class);
     }
 
-    public function getToListArray() 
-	{			
-        $active = 1;	
+    public function getToListArray()
+    {
         $query = $this->createQueryBuilder('a')
             ->select('a.id as id, a.name as name')
             ->orderBy('a.name', 'ASC')
             ->getQuery();
-            
+
         $contractTypes = $query->getResult();
 
         $contractTypesArray = [];
-        
-		//loop to set choices
-		foreach($contractTypes as $lName) {
-            
-			$x =  $lName['id'];
-			$c = $lName['name'];
-			$contractTypesArray["$c"] = $x;			
 
+        foreach ($contractTypes as $lName) {
+            $x = $lName['id'];
+            $c = $lName['name'];
+            $contractTypesArray["$c"] = $x;
         }
 
         return $contractTypesArray;
-
-    } 
-
+    }
 }

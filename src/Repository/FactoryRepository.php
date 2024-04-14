@@ -19,29 +19,23 @@ class FactoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Factory::class);
     }
 
-    public function getToListArray() 
-	{			
-        $active = 1;	
+    public function getToListArray()
+    {
         $query = $this->createQueryBuilder('a')
             ->select('a.id as id, a.name as name')
             ->orderBy('a.name', 'ASC')
             ->getQuery();
-            
+
         $factories = $query->getResult();
 
         $factoriesArray = [];
-        
-		//loop to set choices
-		foreach($factories as $lName) {
-            
-			$x =  $lName['id'];
-			$c = $lName['name'];
-			$factoriesArray["$c"] = $x;			
 
+        foreach ($factories as $lName) {
+            $x = $lName['id'];
+            $c = $lName['name'];
+            $factoriesArray["$c"] = $x;
         }
 
         return $factoriesArray;
-
-    } 
-    
+    }
 }

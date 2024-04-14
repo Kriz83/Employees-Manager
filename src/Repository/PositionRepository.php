@@ -19,29 +19,23 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
-    public function getToListArray() 
-	{			
-        $active = 1;	
+    public function getToListArray()
+    {
         $query = $this->createQueryBuilder('a')
             ->select('a.id as id, a.name as name')
             ->orderBy('a.name', 'ASC')
             ->getQuery();
-            
+
         $positions = $query->getResult();
 
         $positionsArray = [];
-        
-		//loop to set choices
-		foreach($positions as $lName) {
-            
-			$x =  $lName['id'];
-			$c = $lName['name'];
-			$positionsArray["$c"] = $x;			
 
+        foreach ($positions as $lName) {
+            $x = $lName['id'];
+            $c = $lName['name'];
+            $positionsArray["$c"] = $x;
         }
 
         return $positionsArray;
-
-    } 
-    
+    }
 }

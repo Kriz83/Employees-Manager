@@ -26,8 +26,7 @@ class EmployeeRepository extends ServiceEntityRepository
             ->setParameter('documentNumber', $documentNumber)
             ->orderBy('p.id', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     public function checkIfExistByDocumentNumber($documentNumber)
@@ -38,22 +37,21 @@ class EmployeeRepository extends ServiceEntityRepository
             ->setParameter('documentNumber', $documentNumber)
             ->orderBy('p.id', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
-        
-    public function getEmployeesByIdsArray($IdsArray) 
+
+    public function getEmployeesByIdsArray(array $idsArray)
     {
-        $query = $this->createQueryBuilder('p')            
+        $query = $this->createQueryBuilder('p')
             ->orderBy('p.surname', 'ASC')
-            ->where('p.id IN (:IdsArray)')
-            ->setParameter('IdsArray', $IdsArray)
+            ->where('p.id IN (:idsArray)')
+            ->setParameter('idsArray', $idsArray)
             ->getQuery();
 
         return $query->getResult();
     }
 
-    public function getMaxBornDate() 
+    public function getMaxBornDate()
     {
         $query = $this->createQueryBuilder('p')
             ->select('max(p.bornDate) as maxBornDate')
@@ -63,7 +61,7 @@ class EmployeeRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function getMinBornDate() 
+    public function getMinBornDate()
     {
         $query = $this->createQueryBuilder('p')
             ->select('min(p.bornDate) as minBornDate')
