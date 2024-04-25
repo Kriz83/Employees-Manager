@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Service\Search;
 
 use App\Entity\Contract;
-use App\Service\Search\SearchInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
-use App\Service\Search\SearchQueryBuilderInterface;
 
 class SearchContractsService implements SearchInterface
 {

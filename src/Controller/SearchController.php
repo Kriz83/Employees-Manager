@@ -10,8 +10,6 @@ use App\Repository\ContractRepository;
 use App\Repository\EmployeeRepository;
 use App\Service\Search\SearchContractsService;
 use App\Service\Search\SearchEmployeesService;
-use App\Service\Search\SearchInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,10 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchController extends AbstractController
 {
     public function __construct(
+        private SearchContractsService $searchContractsService,
+        private SearchEmployeesService $searchEmployeesService,
         private EmployeeRepository $employeeRepository,
         private ContractRepository $contractRepository,
-        private SearchInterface $searchContractsService,
-        private SearchInterface $searchEmployeesService,
     ) {
     }
 
