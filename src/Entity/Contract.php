@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContractRepository::class)]
-class Contract
+class Contract implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

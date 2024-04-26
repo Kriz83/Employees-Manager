@@ -8,7 +8,7 @@ use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnexRepository::class)]
-class Annex
+class Annex implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
-class Position
+class Position implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

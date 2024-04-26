@@ -10,6 +10,5 @@
             <argument type="service" id="app.service.search.search_contracts_service" />
             <argument type="service" id="app.service.search.search_employees_service" />
         </service>
-
     </services>
 </container>

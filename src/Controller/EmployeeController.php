@@ -7,7 +7,8 @@ namespace App\Controller;
 use App\Entity\Employee;
 use App\Form\Employee\AddEmployeeType;
 use App\Form\Employee\EditEmployeeType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\EmployeeRepository;
+use App\Service\Doctrine\ResourcePersister;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,14 +18,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class EmployeeController extends AbstractController
 {
     public function __construct(
+        private ResourcePersister $resourcePersister,
         private ValidateObjectExistenceService $objectExistenceValidator,
-        private EntityManagerInterface $entityManager
+        private EmployeeRepository $employeeRepository,
     ) {}
 
     #[Route('/employee/add', name: 'app_employee_add')]
     public function addEmployee(Request $request): Response
     {
-
         $employee = new Employee();
 
         $form = $this->createForm(AddEmployeeType::class, $employee);
@@ -32,16 +33,12 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //check if employee with document id is not in db already
             $documentNumber = $form['idDocumentNumber']->getData();
 
-            $repository = $this->entityManager->getRepository(Employee::class);
-            $employeeCheck = $repository->checkIfExistByDocumentNumber($documentNumber);
+            $employeeCheck = $this->employeeRepository->checkIfExistByDocumentNumber($documentNumber);
 
             if (!$employeeCheck) {
-                $this->entityManager->persist($employee);
-                $this->entityManager->flush();
+                $this->resourcePersister->persist($employee);
 
                 $this->addFlash('success', 'New employee was added.');
 
@@ -61,11 +58,8 @@ class EmployeeController extends AbstractController
     #[Route('/employee/profile/{employeeId}', name: 'app_employee_profile')]
     public function profile(int $employeeId): Response
     {
+        $employee = $this->employeeRepository->findOneById($employeeId);
 
-        $repository = $this->entityManager->getRepository(Employee::class);
-        $employee = $repository->findOneById($employeeId);
-
-        //check if employee exist
         $this->objectExistenceValidator->validate($employee, $employeeId);
 
         return $this->render('employee/profile/main.html.twig', [
@@ -76,11 +70,8 @@ class EmployeeController extends AbstractController
     #[Route('/employee/edit/{employeeId}', name: 'app_employee_edit')]
     public function edit(Request $request, int $employeeId): Response
     {
+        $employee = $this->employeeRepository->findOneById($employeeId);
 
-        $repository = $this->entityManager->getRepository(Employee::class);
-        $employee = $repository->findOneById($employeeId);
-
-        //check if employee exist
         $this->objectExistenceValidator->validate($employee, $employeeId);
 
         $form = $this->createForm(EditEmployeeType::class, $employee);
@@ -88,8 +79,7 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($employee);
-            $this->entityManager->flush();
+            $this->resourcePersister->persist($employee);
 
             $this->addFlash('success', 'Employee data was updated.');
 
@@ -103,5 +93,4 @@ class EmployeeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 }
