@@ -12,14 +12,12 @@ use App\Service\Doctrine\ResourcePersister;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Service\Validate\ValidateObjectExistenceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EmployeeController extends AbstractController
 {
     public function __construct(
         private ResourcePersister $resourcePersister,
-        private ValidateObjectExistenceService $objectExistenceValidator,
         private EmployeeRepository $employeeRepository,
     ) {}
 
@@ -60,8 +58,6 @@ class EmployeeController extends AbstractController
     {
         $employee = $this->employeeRepository->findOneById($employeeId);
 
-        $this->objectExistenceValidator->validate($employee, $employeeId);
-
         return $this->render('employee/profile/main.html.twig', [
             'employee' => $employee
         ]);
@@ -71,8 +67,6 @@ class EmployeeController extends AbstractController
     public function edit(Request $request, int $employeeId): Response
     {
         $employee = $this->employeeRepository->findOneById($employeeId);
-
-        $this->objectExistenceValidator->validate($employee, $employeeId);
 
         $form = $this->createForm(EditEmployeeType::class, $employee);
 

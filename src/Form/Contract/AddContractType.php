@@ -2,40 +2,36 @@
 
 namespace App\Form\Contract;
 
-use App\Entity\Factory;
+use App\Repository\ContractTypeRepository;
+use App\Repository\FactoryRepository;
+use App\Repository\PositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AddContractType extends AbstractType
 {
-    private $em;
-    
-    /**
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
+    public function __construct(
+        private EntityManagerInterface $em,
+        private FactoryRepository $factoryRepository,
+        private PositionRepository $positionRepository,
+        private ContractTypeRepository $contractTypeRepository,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
-        $factoriesArray = $this->em
-            ->getRepository('App:Factory')
+        $factoriesArray = $this->factoryRepository
             ->getToListArray();
 
-        $positionsArray = $this->em
-            ->getRepository('App:Position')
+        $positionsArray = $this->positionRepository
             ->getToListArray();
 
-        $contractTypesArray = $this->em
-            ->getRepository('App:ContractType')
+        $contractTypesArray = $this->contractTypeRepository
             ->getToListArray();
 
         $builder
@@ -101,7 +97,7 @@ class AddContractType extends AbstractType
                     'required' => true,
                     'data' => null,
             ))
-            ->add('Add contract', SubmitType::class, array(
+            ->add('add_contract', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'btn-primary'
             )));

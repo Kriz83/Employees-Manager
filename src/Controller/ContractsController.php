@@ -7,8 +7,11 @@ namespace App\Controller;
 use App\Entity\Contract;
 use App\Form\Contract\AddContractType;
 use App\Form\Contract\EditContractType;
+use App\Repository\EmployeeRepository;
+use App\Repository\FactoryRepository;
 use App\Service\Contract\ContractService;
 use App\Service\Contract\RemoveContractService;
+use App\Service\Doctrine\ResourcePersister;
 use App\Service\Validate\ValidateContractService;
 use App\Service\Validate\ValidateObjectExistenceService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,21 +23,17 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContractsController extends AbstractController
 {
     public function __construct(
-        private ValidateObjectExistenceService $objectExistenceValidator,
-        private ValidateContractService $validateContract,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private ResourcePersister $resourcePersister,
+        private EmployeeRepository $employeeRepository,
     ) {
     }
 
     #[Route('/contract/add/{employeeId}', name: 'app_contract_add')]
     public function addContract(Request $request, ContractService $contractService, int $employeeId): Response
     {
-        $employee = $this->entityManager
-            ->getRepository('App:Employee')
+        $employee = $this->employeeRepository
             ->findOneById($employeeId);
-
-        //check if employee exist
-        $this->objectExistenceValidator->validate($employee, $employeeId);
 
         $contract = new Contract();
 
@@ -43,25 +42,13 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $contractService->addContract($contract, $form, $employeeId);
 
-            //validate contract data
-            $contractFormValidate = $this->validateContract->validate($form, $employeeId);
+            $this->addFlash('success', 'New contract was added.');
 
-            if (empty($contractFormValidate)) {
-                //update contract data
-                $contractService->addContract($contract, $form, $employeeId);
-
-                $this->addFlash('success', 'New contract was added.');
-
-                return $this->redirectToRoute('app_show_contracts', [
-                    'employeeId' => $employeeId
-                ]);
-            } else {
-                foreach($contractFormValidate as $message) {
-                    $this->addFlash('error', $message);
-                }
-            }
-
+            return $this->redirectToRoute('app_show_contracts', [
+                'employeeId' => $employeeId
+            ]);
         }
 
         return $this->render('contract/add.html.twig', [
@@ -71,14 +58,11 @@ class ContractsController extends AbstractController
     }
 
     #[Route('/showContracts/{employeeId}', name: 'app_show_contracts')]
-    public function showContracts(Request $request, int $employeeId): Response
+    public function showContracts(int $employeeId): Response
     {
         $employee = $this->entityManager
             ->getRepository('App:Employee')
             ->findOneById($employeeId);
-
-        //check if employee exist
-        $this->objectExistenceValidator->validate($employee, $employeeId);
 
         $contracts = $this->entityManager
             ->getRepository('App:Contract')
@@ -93,14 +77,9 @@ class ContractsController extends AbstractController
     #[Route('/contract/edit/{contractId}', name: 'app_contract_edit')]
     public function edit(Request $request, ContractService $contractService, int $contractId): Response
     {
-
         $repository = $this->entityManager->getRepository(Contract::class);
         $contract = $repository->findOneById($contractId);
 
-        //check if contract exist
-        $this->objectExistenceValidator->validate($contract, $contractId);
-
-        //get employee data
         $employee = $contract->getEmployee();
         $employeeId = $employee->getId();
 
@@ -109,24 +88,13 @@ class ContractsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $contractService->editContract($contract, $form, $employeeId);
 
-            //validate contract data
-            $contractFormValidate = $this->validateContract->validate($form, $employeeId);
+            $this->addFlash('success', 'Contract data was updated.');
 
-            if (empty($contractFormValidate)) {
-                //update contract data
-                $contractService->editContract($contract, $form, $employeeId);
-
-                $this->addFlash('success', 'Contract data was updated.');
-
-                return $this->redirectToRoute('app_show_contracts', [
-                    'employeeId' => $employeeId,
-                ]);
-            } else {
-                foreach($contractFormValidate as $message) {
-                    $this->addFlash('error', $message);
-                }
-            }
+            return $this->redirectToRoute('app_show_contracts', [
+                'employeeId' => $employeeId,
+            ]);
         }
 
         return $this->render('contract/edit.html.twig', [
@@ -139,16 +107,10 @@ class ContractsController extends AbstractController
     #[Route('/contract/details/{contractId}', name: 'app_contract_details')]
     public function details(int $contractId): Response
     {
-
         $repository = $this->entityManager->getRepository(Contract::class);
         $contract = $repository->findOneById($contractId);
 
-        //check if contract exist
-        $this->objectExistenceValidator->validate($contract, $contractId);
-
-        //get employee data
         $employee = $contract->getEmployee();
-
 
         return $this->render('contract/details.html.twig', [
             'contract' => $contract,
@@ -158,21 +120,15 @@ class ContractsController extends AbstractController
 
 
     #[Route('/contract/remove/{contractId}', name: 'app_contract_remove')]
-    public function remove(RemoveContractService $removeContractService, int $contractId): Response
+    public function remove(int $contractId): Response
     {
-
         $repository = $this->entityManager->getRepository(Contract::class);
         $contract = $repository->findOneById($contractId);
 
-        //check if contract exist
-        $this->objectExistenceValidator->validate($contract, $contractId);
-
-        //get employee data
         $employee = $contract->getEmployee();
         $employeeId = $employee->getId();
 
-        //remove contract
-        $removeContractService->removeContract($contract);
+        $this->resourcePersister->remove($contract);
 
         $this->addFlash('warning', 'Contract data and related anexxes were removed.');
 

@@ -18,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AnnexController extends AbstractController
 {
     public function __construct(
-        private ValidateObjectExistenceService $objectExistenceValidator,
         private AnnexService $annexService,
         private EntityManagerInterface $entityManager
     ) {
@@ -30,12 +29,7 @@ class AnnexController extends AbstractController
         $repository = $this->entityManager->getRepository(Contract::class);
         $contract = $repository->findOneById($contractId);
 
-        //check if contract exist
-        $this->objectExistenceValidator->validate($contract, $contractId);
-
-        //get employee data
         $employee = $contract->getEmployee();
-        $employeeId = $employee->getId();
 
         $annex = new Annex();
 
@@ -44,7 +38,6 @@ class AnnexController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //add annex for contract
             $this->annexService->addAnnex($contract, $annex, $form);
 
             $this->addFlash('success', 'New annex was added.');
