@@ -33,15 +33,12 @@ class SearchController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //create search class (service)
-            $searchedIdsData = $this->searchEmployeesService->search($form);
-
             return $this->redirectToRoute('app_search_employees_show', [
-                'searchedIdsData' => $searchedIdsData,
+                'searchedIdsData' => $this->searchEmployeesService->search($form),
             ]);
         }
 
-        return $this->render('search/employees/search.html.twig', [
+        return $this->render('search/eployees/search.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -51,12 +48,8 @@ class SearchController extends AbstractController
     {
         $searchedIdsData = $request->query->get('searchedIdsData');
 
-        //get employees array
-        $employees = $this->employeeRepository
-            ->getEmployeesByIdsArray($searchedIdsData);
-
-        return $this->render('search/employees/showSearchResult.html.twig', [
-            'employees' => $employees,
+        return $this->render('search/eployees/showSearchResult.html.twig', [
+            'employees' => $this->employeeRepository->getEmployeesByIdsArray($searchedIdsData),
         ]);
     }
 
@@ -68,7 +61,6 @@ class SearchController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //create search class (service)
             $searchedIdsData = $this->searchContractsService->search($form);
 
             return $this->redirectToRoute('app_search_contracts_show', [

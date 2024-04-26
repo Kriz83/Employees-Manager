@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Employee;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\EmployeeRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Service\Convert\ConvertDataService;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,37 +14,16 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class SearchForEmployeesType extends AbstractType
 {
-    private $em;
-    
-    /**
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(EntityManagerInterface $em, ConvertDataService $convert)
-    {
-        $this->em = $em;
-        $this->convert = $convert;
+    public const DEFAULT_MIN_BORN_DATE = '2000-01-01';
+
+    public function __construct(
+        private ConvertDataService $convert,
+        private EmployeeRepository $employeeRepository,
+    ) {
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {    
-        
-        $minBornDate = $this->em->getRepository('App:Employee')->getMinBornDate();
-        $maxBornDate = $this->em->getRepository('App:Employee')->getMaxBornDate();
-
-        if ($minBornDate) {
-            $minBornDate = $this->convert->convertDateStringToDatetimeObject($minBornDate['minBornDate']);
-            $minBornDate = $minBornDate->format('Y');
-        } else {
-            $minBornDate = "date('Y') + 1";
-        }
-
-        if ($maxBornDate) {
-            $maxBornDate = $this->convert->convertDateStringToDatetimeObject($maxBornDate['maxBornDate']);
-            $maxBornDate = $maxBornDate->format('Y');
-        } else {
-            $maxBornDate = "date('Y') + 1";
-        }
-           
+    {
         $builder
             ->add(
                 'name', TextType::class, array(
@@ -80,7 +61,7 @@ class SearchForEmployeesType extends AbstractType
                     'label' => 'Born date range from:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
-                    'years' => range($minBornDate, $maxBornDate),
+                    'years' => range($this->getMinBornDate(), $this->getMaxBornDate()),
                     'required' => false,
                     'data' => null,
                 )
@@ -93,7 +74,7 @@ class SearchForEmployeesType extends AbstractType
                     'label' => 'Born date range to:',                    
                     'widget' => 'choice',
                     'format' => 'dd-MM-yyyy',
-                    'years' => range($minBornDate, $maxBornDate),
+                    'years' => range($this->getMinBornDate(), $this->getMaxBornDate()),
                     'required' => false,
                     'data' => null,
                 )
@@ -103,6 +84,37 @@ class SearchForEmployeesType extends AbstractType
                     'class' => 'btn-primary'
                 )
             ));
-        
+    }
+
+    private function getMinBornDate(): ?string
+    {
+        $minBornDate = $this->employeeRepository->getMinBornDate();
+
+        if ($minBornDate) {
+            $minBornDate = $this->convert
+                ->convertDateStringToDatetimeObject(
+                    $minBornDate['minBornDate'] ?: self::DEFAULT_MIN_BORN_DATE
+                );
+
+            return $minBornDate->format('Y');
+        }
+
+        return "date('Y') + 1";
+    }
+
+    private function getMaxBornDate(): ?string
+    {
+        $maxBornDate = $this->employeeRepository->getMaxBornDate();
+
+        if ($maxBornDate) {
+            $maxBornDate = $this->convert
+                ->convertDateStringToDatetimeObject(
+                    $maxBornDate['maxBornDate'] ?: self::DEFAULT_MIN_BORN_DATE
+                );
+
+            return $maxBornDate->format('Y');
+        }
+
+        return "date('Y') + 1";
     }
 }
